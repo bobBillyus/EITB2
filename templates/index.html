@@ -1,11 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <meta charset="UTF-8">
-   <title>EITB2</title>
-   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"
+    <meta charset="UTF-8">
+    <title>EITB2</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-   <h1>Welcome to Flask Website</h1>
+    <h1>EITB2</h1>
+
+    <form action="/" method="POST">
+        <label for="wiki_query">Enter any Wikipedia page:</label>
+        <input 
+            type="text" 
+            id="wiki_query" 
+            name="wiki_page" 
+            placeholder="Enter a topic..." 
+            required
+        >
+        <button type="submit">Search</button>
+    </form>
+
+    <hr>
+
+    {% if result %}
+        <div class="result-container">
+            <h2>{{ result.title }}</h2>
+            <p>{{ result.summary }}</p>
+        </div>
+    {% elif error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
 </body>
 </html>
