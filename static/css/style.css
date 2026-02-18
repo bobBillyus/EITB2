@@ -52,3 +52,25 @@ h1 {
     color:#f4f4f4;
     padding-left: 2%;
 }
+
+.input-container {
+    position: relative; /* Essential for positioning the icon */
+    width: 100%;
+    max-width: 300px;  /* Adjust as needed */
+}
+
+.input-container i {
+    position: absolute;
+    left: 10px;        /* Distance from left edge */
+    top: 50%;
+    transform: translateY(-50%); /* Perfectly centers it vertically */
+    color: #888;       /* Icon color */
+}
+
+#wiki_query {
+    width: 100%;
+    padding: 10px 10px 10px 35px; /* Extra padding on the left (35px) for the icon */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Keeps the box from growing too wide */
+}
