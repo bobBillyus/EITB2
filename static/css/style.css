@@ -13,15 +13,15 @@ h1 {
   flex: 3;
   background-color: #f4f4f4;
   padding: 20px;
-  border-radius: 2%;
+  border-radius: 4%;
 }
 
 .sidebar {
   flex: 1; /* Takes up 25% of the width */
   background-color: #ddd;
   padding: 20px;
-  min-width: 200px; /* Prevents it from getting too squished */
-  border-radius: 2%;
+  min-width: 200px;
+  border-radius: 4%;
 }
 
 /* Responsive Design: Stack them on mobile */
@@ -32,5 +32,6 @@ h1 {
 }
 
 .titlebar {
-    color: blue
+    background-color: blue;
+    min-width: 200px;
 }
