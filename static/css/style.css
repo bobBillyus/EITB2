@@ -10,9 +10,9 @@ h1 {
 }
 
 .main-content {
-  flex: 3.5;
+  flex: 3;
   background-color: #f4f4f4;
-  padding: 20px;
+  padding: 10px;
 }
 
 .sidebar {
