@@ -2,3 +2,29 @@ h1 {
     color: blue;
     text-align: center;
 }
+
+.container {
+  display: flex;
+  gap: 20px; /* Adds space between the content and sidebar */
+  padding: 20px;
+}
+
+.main-content {
+  flex: 3; /* Takes up 75% of the width */
+  background-color: #f4f4f4;
+  padding: 20px;
+}
+
+.sidebar {
+  flex: 1; /* Takes up 25% of the width */
+  background-color: #ddd;
+  padding: 20px;
+  min-width: 200px; /* Prevents it from getting too squished */
+}
+
+/* Responsive Design: Stack them on mobile */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+}
