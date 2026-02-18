@@ -7,28 +7,35 @@ h1 {
     display: flex;
     gap: 20px; /* space between the content and sidebar */
     padding: 20px;
+    flex-direction: row;
 }
 
 .main-content {
-    flex: 3;
+    flex: 1;
     background-color: #f4f4f4;
     padding: 20px;
     border-radius: 4px;
 }
 
 .sidebar {
-    flex: 1;
+    /* 1. Remove flex: 1; use a fixed starting width instead */
+    width: 300px; 
+    
+    /* 2. These remain the same */
     background-color: #ddd;
-    padding: 15px;
     min-width: 200px;
     max-width: 500px;
     min-height: 90vh;
     border-radius: 4px;
-    padding-top: 0%;
-    align-items: stretch;
-    overflow: auto; /* Required for resize to work */
-    resize: horizontal; /* Allows dragging the right edge */
-    border-right: 2px solid #ccc; /* Gives the user a visual "edge" to grab */
+    
+    /* 3. Essential for the resize handle to appear */
+    overflow: auto; 
+    resize: horizontal; 
+    border-right: 4px solid #ccc; /* Thicker border makes it easier to see */
+    
+    /* 4. Fix padding-top if you want it flush */
+    padding: 15px;
+    padding-top: 0; 
 }
 
 /* Responsive Design: Stack them on mobile */
