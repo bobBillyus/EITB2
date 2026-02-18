@@ -21,9 +21,14 @@ h1 {
     background-color: #ddd;
     padding: 15px;
     min-width: 200px;
-    min-height: 100vh;
+    max-width: 500px;
+    min-height: 90vh;
     border-radius: 4px;
     padding-top: 0%;
+    align-items: stretch;
+    overflow: auto; /* Required for resize to work */
+    resize: horizontal; /* Allows dragging the right edge */
+    border-right: 2px solid #ccc; /* Gives the user a visual "edge" to grab */
 }
 
 /* Responsive Design: Stack them on mobile */
