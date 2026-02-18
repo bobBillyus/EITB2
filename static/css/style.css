@@ -22,6 +22,7 @@ h1 {
   padding: 20px;
   min-width: 200px;
   border-radius: 4%;
+  padding-top: 0;
 }
 
 /* Responsive Design: Stack them on mobile */
@@ -32,6 +33,8 @@ h1 {
 }
 
 .titlebar {
+    margin-top: 0;
     background-color: blue;
     min-width: 200px;
+    color:#ddd;
 }
