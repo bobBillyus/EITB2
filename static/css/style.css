@@ -5,12 +5,12 @@ h1 {
 
 .container {
   display: flex;
-  gap: 20px; /* Adds space between the content and sidebar */
+  gap: 20px; /* space between the content and sidebar */
   padding: 20px;
 }
 
 .main-content {
-  flex: 3; /* Takes up 75% of the width */
+  flex: 3.5;
   background-color: #f4f4f4;
   padding: 20px;
 }
@@ -20,6 +20,7 @@ h1 {
   background-color: #ddd;
   padding: 20px;
   min-width: 200px; /* Prevents it from getting too squished */
+  border-radius: 2;
 }
 
 /* Responsive Design: Stack them on mobile */
@@ -27,4 +28,8 @@ h1 {
   .container {
     flex-direction: column;
   }
+}
+
+.titlebar {
+    color: blue
 }
