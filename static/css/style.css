@@ -4,37 +4,37 @@ h1 {
 }
 
 .container {
-  display: flex;
-  gap: 20px; /* space between the content and sidebar */
-  padding: 20px;
+    display: flex;
+    gap: 20px; /* space between the content and sidebar */
+    padding: 20px;
 }
 
 .main-content {
-  flex: 3;
-  background-color: #f4f4f4;
-  padding: 20px;
-  border-radius: 4%;
+    flex: 3;
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 4%;
 }
 
 .sidebar {
-  flex: 1; /* Takes up 25% of the width */
-  background-color: #ddd;
-  padding: 20px;
-  min-width: 200px;
-  border-radius: 4%;
-  padding-top: 0;
+    padding-top: 0%;
+    flex: 1;
+    background-color: #ddd;
+    padding: 20px;
+    min-width: 200px;
+    border-radius: 4%;
 }
 
 /* Responsive Design: Stack them on mobile */
 @media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-  }
+    .container {
+        flex-direction: column;
+    }
 }
 
 .titlebar {
     margin-top: 0;
     background-color: blue;
     min-width: 200px;
-    color:#ddd;
+    color:#f4f4f4;
 }
