@@ -13,7 +13,7 @@ h1 {
     flex: 3;
     background-color: #f4f4f4;
     padding: 20px;
-    border-radius: 4%;
+    border-radius: 4px;
 }
 
 .sidebar {
@@ -21,7 +21,8 @@ h1 {
     background-color: #ddd;
     padding: 15px;
     min-width: 200px;
-    border-radius: 4%;
+    min-height: 100vh;
+    border-radius: 4px;
     padding-top: 0%;
 }
 
