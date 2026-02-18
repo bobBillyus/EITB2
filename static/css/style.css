@@ -12,7 +12,8 @@ h1 {
 .main-content {
   flex: 3;
   background-color: #f4f4f4;
-  padding: 10px;
+  padding: 20px;
+  border-radius: 2%;
 }
 
 .sidebar {
@@ -20,7 +21,7 @@ h1 {
   background-color: #ddd;
   padding: 20px;
   min-width: 200px; /* Prevents it from getting too squished */
-  border-radius: 2;
+  border-radius: 2%;
 }
 
 /* Responsive Design: Stack them on mobile */
