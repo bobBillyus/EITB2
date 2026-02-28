@@ -22,12 +22,11 @@ def home():
     #query_for_graph = ""
     if request.method == "POST":
         userinput = request.form.get("wiki_page", None)
-        page = user.page(userinput)
-
-        if page.exists():
-            srcpage = page.title
+        # page = user.page(userinput)
+        # if page.exists():
+        #     srcpage = page.title
        
-    return render_template("index.html",result=srcpage)
+    return render_template("index.html",result=userinput)
 
 if __name__=='__main__':
    app.run(debug=True)
