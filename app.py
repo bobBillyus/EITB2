@@ -7,7 +7,7 @@ import wikipedia
 from flask import Flask, render_template, request
 
 #This is the library for the graph visual
-from dash import Dash, html, dcc, Input, Output
+from dash import Dash, html, dcc, Input, Output, no_update, clientside_callback
 import dash_cytoscape as cyto
 
 #Initialize Wikipedia API
@@ -20,7 +20,6 @@ server = Flask(__name__)
 def home():
     result = None
     suggestions = None
-    url = None
     query_for_graph = "" # This will be passed to the iframe
 
     if request.method == 'POST':
@@ -29,19 +28,18 @@ def home():
         if user_query:
             page = user.page(user_query)
             if page.exists() == True:
-                url = page.fullurl
                 query_for_graph = user_query # Set this to update the iframe
-                result = {'title': page.title, 'summary': page.summary[:500]}
+                result = {'title': page.title}
+                print(wikipedia.search(str(user_query)))
             else:
                 suggestions = wikipedia.search(str(user_query))
 
-    return render_template('index.html', url=url, suggestions=suggestions, result=result, query=query_for_graph)
+    return render_template('index.html', suggestions=suggestions, result=result, query=query_for_graph)
 
 # 2. Setup Dash
 app = Dash(__name__, server=server, url_base_pathname='/graph/')
 
-# 3. Define a "Loading" Layout
-# We start with an empty Div and a Location component to watch the URL
+#Empty div
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     html.Div(id='graph-content')
@@ -67,9 +65,9 @@ def update_graph(search):
     return cyto.Cytoscape(
         id='cytoscape',
         elements=[
-            {'data': {'id': 'target', 'label': page.title}},
+            {'data': {'id': 'srcpage', 'label': page.title,'url': page.fullurl}},
             {'data': {'id': 'on', 'label': 'Ontario'}},
-            {'data': {'id': 'e1', 'source': 'target', 'target': 'on'}},
+            {'data': {'id': 'e1', 'source': 'srcpage', 'target': 'on'}},
         ],
         layout={'name': 'breadthfirst'},
         style={'width': '100%', 'height': '500px'}
