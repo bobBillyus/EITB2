@@ -26,8 +26,20 @@ def home():
             
     return render_template("index.html", result=srcpage)
 
+# #Setup Dash
+# app = Dash(__name__, server=app, url_base_pathname='/graph/')
+
+# #Empty div
+# app.layout = html.Div([
+#     dcc.Location(id='url', refresh=False),
+#     html.Div(id='graph-content')
+# ])
+
+
 if __name__=='__main__':
    app.run(debug=True)
+
+
 
 # #Setup Flask 
 # server = Flask(__name__)
