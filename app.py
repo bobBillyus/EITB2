@@ -15,14 +15,22 @@ user = wikipediaapi.Wikipedia(user_agent='EITB2 (aryand4120@gmail.com)', languag
 app = Flask(__name__)   
 
 @app.route('/', methods =["GET", "POST"])
-def gfg():
+def home():
+    srcpage = None
+    #result = None
+    #suggestions = None
+    #query_for_graph = ""
     if request.method == "POST":
-       userinput = request.form.get("fname")
-       srcpage = user.page(userinput)
-    return render_template("index.html", result=srcpage)
+        userinput = request.form.get("wiki_page", None)
+        page = user.page(userinput)
+
+        if page.exists():
+            srcpage = page.title
+       
+    return render_template("index.html",result=srcpage)
 
 if __name__=='__main__':
-   app.run()
+   app.run(debug=True)
 
 # #Setup Flask 
 # server = Flask(__name__)
