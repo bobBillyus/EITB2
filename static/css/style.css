@@ -1,44 +1,10 @@
-/* Layout Container */
-.container {
+.wrapper {
     display: flex;
     min-height: 100vh;
-    align-items: stretch; /* Makes sidebar same height as main content */
+    align-items: stretch;
 }
 
-/* Main Content grows to fill space */
-.main-content {
+.main {
     flex: 1;
     padding: 20px;
-}
-
-/* Sidebar Styles */
-.sidebar {
-    width: 300px;
-    min-width: 200px;
-    max-width: 600px;
-    background-color: #ddd;
-    border-left: 2px solid #ccc; /* Grab handle area */
-    
-    /* Resize logic */
-    overflow: auto; 
-    resize: horizontal;
-    direction: rtl; /* Puts the resize handle on the left side of the sidebar */
-}
-
-/* Flip direction back for text inside sidebar */
-.sidebar > * {
-    direction: ltr;
-}
-
-/* The "Short Rectangle" flush at the top */
-.titlebar {
-    background-color: #333;
-    color: white;
-    padding: 10px 15px;
-    margin: 0; /* Ensures it touches the top/sides */
-}
-
-.titlebar h3 {
-    margin: 0;
-    font-size: 1.1rem;
 }

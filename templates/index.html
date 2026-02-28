@@ -7,8 +7,8 @@
 </head>
 <body>
 
-    <div class="container">
-        <main class="main-content">
+    <div class="wrapper">
+        <div class="main">
             <h1>EITB2</h1>
             <p>ahhhhhh</p>
             <form action="{{ url_for('home') }}" method="post">
@@ -22,39 +22,11 @@
                 >
                 <button type="submit">Search</button>
             </form>
-
-            <!-- <hr>
-
-            {# Suggestions if page not found #}
-            {% if suggestions %}
-                <p>Page not found. Did you mean:</p>
-                <ul>
-                    {% for s in suggestions %}
-                        <li>{{ s }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-
-            {# Graph Section - Placed outside of results logic #}
-            {% if query %}
-                <div class="graph-box" style="margin-top: 20px;">
-                    <iframe 
-                        src="/graph/?name={{ query }}" 
-                        style="width: 100%; height: 600px; border: 1px solid #ccc; border-radius: 8px;">
-                    </iframe>
-                </div>
-            {% else %}
-                <p>The graph will appear here after your first search.</p>
-            {% endif %}
-        </main> -->
-
-        <aside class="sidebar">
-            <div class="titlebar">
-                <h3>What is this?</h3>
-            </div>
-            <h2>der sidebar</h2>
-            <p>more ahh</p>
-        </aside>
+        </div>
+        <button class="sidebar_toggle" type="button">
+            <span class="material-icons sp-icon-open">keyboard_double_arrow_left</span>
+            <span class="material-icons sp-icon-close">keyboard_double_arrow_right</span>
+        </button>
     </div>
 
 </body>
