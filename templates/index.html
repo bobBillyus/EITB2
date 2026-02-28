@@ -25,18 +25,22 @@
 
             <hr>
 
-            {% if result %}
-                {% if message %}
-                    <p><strong>{{ message }}</strong></p>
-                {% endif %}
-                </div>
-            {% elif suggestions %}
+            {# Status Messages #}
+            {% if message %}
+                <p><strong>{{ message }}</strong></p>
+            {% endif %}
+
+            {# Suggestions if page not found #}
+            {% if suggestions %}
                 <p>Page not found. Did you mean:</p>
                 <ul>
                     {% for s in suggestions %}
                         <li>{{ s }}</li>
                     {% endfor %}
                 </ul>
+            {% endif %}
+
+            {# Graph Section - Placed outside of results logic #}
             {% if query %}
                 <div class="graph-box" style="margin-top: 20px;">
                     <iframe 
@@ -47,6 +51,7 @@
             {% else %}
                 <p>The graph will appear here after your first search.</p>
             {% endif %}
+        </main>
 
         <aside class="sidebar">
             <div class="titlebar">
