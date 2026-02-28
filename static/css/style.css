@@ -1,7 +1,6 @@
 .wrapper {
     display: flex;
     min-height: 100vh;
-    align-items: stretch;
 }
 
 .main {
@@ -28,10 +27,16 @@
     background: rgb(255, 119, 0);
 }
 
-.sp-icon-close {
+.sb-icon-close {
     display: none !important;
 }
 
 .sidebar {
-
+    /* display: none; */
+    width: 200px;
+    flex-shrink: 0;
+    padding: 20px;
+    color: white;
+    background: rgb(255, 140, 0);
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.35); */
 }
