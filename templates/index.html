@@ -1,44 +1,61 @@
-<div class="container">
-    <main class="main-content">
-        <h1>EITB2</h1>
-        <p>ahhhhhh</p>
-        <form action="/" method="POST">
-            <label for="wiki_query">Enter any Wikipedia page:</label>
-            <input 
-                type="text" 
-                id="wiki_query" 
-                name="wiki_page" 
-                placeholder="Search Wikipedia..." 
-                required
-            >
-            <button type="submit">Search</button>
-        </form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EITB2</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
 
-        <hr>
+    <div class="container">
+        <main class="main-content">
+            <h1>EITB2</h1>
+            <p>ahhhhhh</p>
+            <form action="/" method="POST">
+                <label for="wiki_query">Enter any Wikipedia page:</label>
+                <input 
+                    type="text" 
+                    id="wiki_query" 
+                    name="wiki_page" 
+                    placeholder="Search Wikipedia..." 
+                    required
+                >
+                <button type="submit">Search</button>
+            </form>
 
-        {% if result %}
-            <div class="result-container">
-                <h2>{{ result.title }}</h2>
-                <p>{{ result.summary }}</p>
+            <hr>
+
+            {% if result %}
+                <div class="result-container">
+                    <h2>{{ result.title }}</h2>
+                    <p>{{ result.summary }}</p>
+                    <p><a href="{{ url }}" target="_blank">View Full Page</a></p>
+                {% if message %}
+                    <p><strong>{{ message }}</strong></p>
+                {% endif %}
+                </div>
+            {% elif suggestions %}
+                <p>Page not found. Did you mean:</p>
+                <ul>
+                    {% for s in suggestions %}
+                        <li>{{ s }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <div class="graph-box" style="margin-top: 20px;">
+                <iframe src="/graph/" style="width: 100%; height: 600px; border: 1px solid #ccc; border-radius: 8px;"></iframe>
             </div>
-        {% elif error %}
-            <p style="color: red;">{{ error }}</p>
-        {% endif %}
+        </main>
 
-        <div class="graph-section" style="margin-top: 20px;">
-            <iframe 
-                src="/graph/" 
-                style="width: 100%; height: 600px; border: 1px solid #ccc; border-radius: 8px;">
-            </iframe>
-        </div>
+        <aside class="sidebar">
+            <div class="titlebar">
+                <h3>What is this?</h3>
+            </div>
+            <h2>der sidebar</h2>
+            <p>more ahh</p>
+        </aside>
+    </div>
 
-    </main>
-
-    <aside class="sidebar">
-        <div class="titlebar">
-            <h3>What is this?</h3>
-        </div>
-        <h2>der sidebar</h2>
-        <p>more ahh</p>
-    </aside>
-</div>
+</body>
+</html>
