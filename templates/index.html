@@ -26,10 +26,6 @@
             <hr>
 
             {% if result %}
-                <div class="result-container">
-                    <h2>{{ result.title }}</h2>
-                    <p>{{ result.summary }}</p>
-                    <p><a href="{{ url }}" target="_blank">View Full Page</a></p>
                 {% if message %}
                     <p><strong>{{ message }}</strong></p>
                 {% endif %}
@@ -41,12 +37,16 @@
                         <li>{{ s }}</li>
                     {% endfor %}
                 </ul>
+            {% if query %}
+                <div class="graph-box" style="margin-top: 20px;">
+                    <iframe 
+                        src="/graph/?name={{ query }}" 
+                        style="width: 100%; height: 600px; border: 1px solid #ccc; border-radius: 8px;">
+                    </iframe>
+                </div>
+            {% else %}
+                <p>The graph will appear here after your first search.</p>
             {% endif %}
-
-            <div class="graph-box" style="margin-top: 20px;">
-                <iframe src="/graph/" style="width: 100%; height: 600px; border: 1px solid #ccc; border-radius: 8px;"></iframe>
-            </div>
-        </main>
 
         <aside class="sidebar">
             <div class="titlebar">
