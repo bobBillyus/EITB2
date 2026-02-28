@@ -10,10 +10,10 @@ from flask import Flask, render_template, request
 from dash import Dash, html, dcc, Input, Output
 import dash_cytoscape as cyto
 
-# Initialize Wikipedia API
+#Initialize Wikipedia API
 user = wikipediaapi.Wikipedia(user_agent='EITB2 (aryand4120@gmail.com)', language='en')
 
-# 1. Setup Flask first
+#Setup Flask 
 server = Flask(__name__)
 
 @server.route('/', methods=['GET', 'POST'])
@@ -21,7 +21,6 @@ def home():
     result = None
     suggestions = None
     url = None
-    message = None
     query_for_graph = "" # This will be passed to the iframe
 
     if request.method == 'POST':
@@ -31,14 +30,12 @@ def home():
             page = user.page(user_query)
             if page.exists() == True:
                 url = page.fullurl
-                message = "Page found!"
                 query_for_graph = user_query # Set this to update the iframe
                 result = {'title': page.title, 'summary': page.summary[:500]}
             else:
-                message = "Page not found"
                 suggestions = wikipedia.search(str(user_query))
 
-    return render_template('index.html', message=message, url=url, suggestions=suggestions, result=result, query=query_for_graph)
+    return render_template('index.html', url=url, suggestions=suggestions, result=result, query=query_for_graph)
 
 # 2. Setup Dash
 app = Dash(__name__, server=server, url_base_pathname='/graph/')
