@@ -69,9 +69,7 @@ def update_graph(search):
         elements=[
             {'data': {'id': 'target', 'label': page.title}},
             {'data': {'id': 'on', 'label': 'Ontario'}},
-            {'data': {'id': 'qc', 'label': 'Quebec'}},
             {'data': {'id': 'e1', 'source': 'target', 'target': 'on'}},
-            {'data': {'id': 'e2', 'source': 'target', 'target': 'qc'}}
         ],
         layout={'name': 'breadthfirst'},
         style={'width': '100%', 'height': '500px'}
