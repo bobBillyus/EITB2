@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>EITB2</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-
-    <div class="container">
+<div class="container">
     <main class="main-content">
         <h1>EITB2</h1>
         <p>ahhhhhh</p>
@@ -34,6 +25,13 @@
             <p style="color: red;">{{ error }}</p>
         {% endif %}
 
+        <div class="graph-section" style="margin-top: 20px;">
+            <iframe 
+                src="/graph/" 
+                style="width: 100%; height: 600px; border: 1px solid #ccc; border-radius: 8px;">
+            </iframe>
+        </div>
+
     </main>
 
     <aside class="sidebar">
@@ -43,8 +41,4 @@
         <h2>der sidebar</h2>
         <p>more ahh</p>
     </aside>
-    </div>
-
-</body>
-</html>
-
+</div>
