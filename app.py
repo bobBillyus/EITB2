@@ -17,16 +17,14 @@ app = Flask(__name__)
 @app.route('/', methods =["GET", "POST"])
 def home():
     srcpage = None
-    #result = None
-    #suggestions = None
-    #query_for_graph = ""
     if request.method == "POST":
-        userinput = request.form.get("wiki_page", None)
-        # page = user.page(userinput)
-        # if page.exists():
-        #     srcpage = page.title
-       
-    return render_template("index.html",result=userinput)
+        userinput = request.form.get("wiki_page", None) 
+        page = user.page(userinput)
+
+        if page.exists(): 
+            srcpage = page.title
+            
+    return render_template("index.html", result=srcpage)
 
 if __name__=='__main__':
    app.run(debug=True)
