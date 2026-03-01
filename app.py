@@ -26,9 +26,6 @@ def home():
             
     return render_template("index.html", result=srcpage)
 
-# @app.route("/do_action", methods=["POST"])
-# def do_action():
-#     return ({"message": "Button clicked successfully!"})
 
 # #Setup Dash
 # app = Dash(__name__, server=app, url_base_pathname='/graph/')

@@ -5,7 +5,7 @@
     <title>EITB2</title>
 
     <script>
-        function sendAction() {
+        function togglesidebar() {
             const wrapper = document.querySelector(".wrapper");   
             if (wrapper) {
                 wrapper.classList.toggle("sidebar_open");
@@ -36,7 +36,7 @@
                 <button type="submit">Search</button>
             </form>
         </div>
-        <button class="sidebar_toggle" type="button" onclick="sendAction()">
+        <button class="sidebar_toggle" type="button" onclick="togglesidebar()">
             <span class="material-icons sb-icon-open">keyboard_double_arrow_left</span>
             <span class="material-icons sb-icon-close">keyboard_double_arrow_right</span>
         </button>
