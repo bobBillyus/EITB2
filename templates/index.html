@@ -6,14 +6,14 @@
 
     <script>
         document.querySelector(".sidebar_toggle").addEventListener("click", () => {
-            document.querySelector(".wrapper").classList.toggle(".sidebar_open")
+            document.querySelector(".wrapper").classList.toggle("sidebar_open")
         })
         function sendAction() {
             fetch("/do_action", {
                 method: "POST"
             })
             .then(response => response.json())
-            .then(document.querySelector(".wrapper").classList.toggle(".sidebar_open"))
+            .then(document.querySelector(".wrapper").classList.toggle("sidebar_open"))
             .then(data => {
                 alert(data.message);
             })
@@ -28,7 +28,7 @@
 </head>
 <body>
 
-    <div class="wrapper">
+    <div class="wrapper sidebar_open">
         <div class="main">
             <h1>EITB2</h1>
             <p>ahhhhhh</p>
