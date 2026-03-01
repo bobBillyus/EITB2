@@ -14,9 +14,6 @@
             })
             .then(response => response.json())
             .then(document.querySelector(".wrapper").classList.toggle("sidebar_open"))
-            .then(data => {
-                alert(data.message);
-            })
             .catch(error => {
                 console.error("Error:", error)
             })
@@ -49,17 +46,6 @@
             <span class="material-icons sb-icon-close">keyboard_double_arrow_right</span>
         </button>
 
-        <!-- <input type="checkbox" id="nav-toggle" style="display: none;">
-        <label for="nav-toggle" class="sidebar_toggle">
-            <span class="material-icons sb-icon-open">keyboard_double_arrow_left</span>
-            <span class="material-icons sb-icon-close">keyboard_double_arrow_right</span>
-        </label>
-
-        <div class="wrapper">
-            </div> -->
-
-    
-    
         <div class="sidebar">
             Sidebar content
         </div>
