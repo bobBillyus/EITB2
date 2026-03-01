@@ -50,6 +50,22 @@ button .fa-solid{
     color: #555;
 }
 
+.suggestions ul {
+    border-top: 1px solid #999;
+    padding: 15px 10px;
+}
+
+.suggestions ul li{
+    list-style: none;
+    border-radius: 3px;
+    padding: 15px 10px;
+    cursor: pointer;
+}
+
+.suggestions ul li:hover{
+    background: #e9f3ff;
+}
+
 /* Sidebar */
 
 .sidebar_toggle {
