@@ -29,7 +29,7 @@ def home():
 @app.route("/do_action", methods=["POST"])
 def do_action():
     print("Clicked!")
-    return {"status": "ok"}, 200
+    return jsonify({"message": "Button clicked successfully!"})
 
 # #Setup Dash
 # app = Dash(__name__, server=app, url_base_pathname='/graph/')
@@ -104,6 +104,3 @@ if __name__=='__main__':
 #         layout={'name': 'breadthfirst'},
 #         style={'width': '100%', 'height': '500px'}
 #     )
-
-# if __name__ == '__main__':
-#     server.run(debug=True)

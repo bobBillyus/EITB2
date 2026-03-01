@@ -6,11 +6,15 @@
 
     <script>
         document.querySelector(".sidebar_toggle").addEventListener("click", () => {
-            document.querySelector(".wrapper").classList.toggle("sidebar_open")
+            document.querySelector(".wrapper").classList.toggle(".sidebar_open")
         })
         function sendAction() {
             fetch("/do_action", {
                 method: "POST"
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
             })
             .catch(error => {
                 console.error("Error:", error)
