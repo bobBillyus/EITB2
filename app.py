@@ -29,6 +29,8 @@ def home():
 @app.route("/do_action", methods=["POST"])
 def do_action():
     print("Clicked!")
+    return {"status": "ok"}, 200
+
 # #Setup Dash
 # app = Dash(__name__, server=app, url_base_pathname='/graph/')
 
