@@ -5,19 +5,16 @@
     <title>EITB2</title>
 
     <script>
-        document.querySelector(".sidebar_toggle").addEventListener("click", () => {
-            document.querySelector(".wrapper").classList.toggle("sidebar_open")
-        })
-        // function sendAction() {
-        //     fetch("/do_action", {
-        //         method: "POST"
-        //     })
-        //     .then(response => response.json())
-        //     .then(document.querySelector(".wrapper").classList.toggle("sidebar_open"))
-        //     .catch(error => {
-        //         console.error("Error:", error)
-        //     })
-        // }
+        function sendAction() {
+            fetch("/do_action", {
+                method: "POST"
+            })
+            .then(response => response.json())
+            .then(document.querySelector(".wrapper").classList.toggle("sidebar_open"))
+            .catch(error => {
+                console.error("Error:", error)
+            })
+        }
     </script>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
