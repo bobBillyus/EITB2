@@ -46,9 +46,9 @@
 }
 
 .sidebar_open .sb-icon-open{
-    display: none !important
+    display: none !important;
 }
 
 .sidebar_open .sb-icon-close{
-    display: inital !important
+    display: inital !important;
 }
