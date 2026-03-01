@@ -30,7 +30,24 @@ input{
     background: transparent;
     border: 0;
     outline: 0;
-    
+
+}
+
+button{
+    background: transparent;
+    border: 0;
+    outline: 0;
+}
+
+button .fa-solid{
+    width: 25px;
+    color: #555;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+::placeholder{
+    color: #555;
 }
 
 /* Sidebar */
