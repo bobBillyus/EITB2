@@ -18,14 +18,8 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
 
-    <div class="search_box">
-        <div class="row">
-            <input type="text" id="input_box" placeholder="Search Wikipedia...">
-            <button><i class="fa-solid fa-magnifying-glass"></i></button>
-        </div>
-    </div>
+<body>
     <div class="wrapper sidebar_open">
         <div class="main">
             <h1>EITB2</h1>
@@ -41,6 +35,12 @@
                 >
                 <button type="submit">Search</button>
             </form>
+        </div>
+        <div class="search_box">
+            <div class="row">
+                <input type="text" id="input_box" placeholder="Search Wikipedia...">
+                <button><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
         </div>
         <!-- Sidebar toggle button -->
         <button class="sidebar_toggle" type="button" onclick="togglesidebar()">
