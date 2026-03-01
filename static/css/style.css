@@ -41,14 +41,15 @@
     /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.35); */
 }
 
-.sidebar_open .sidebar{
-    display: inital;
+/* When the checkbox is checked, change the sidebar and icons */
+#nav-toggle:checked ~ .wrapper .sidebar {
+    display: block;
 }
 
-.sidebar_open .sb-icon-open{
-    display: none !important;
+#nav-toggle:checked ~ .wrapper .sb-icon-open {
+    display: none;
 }
 
-.sidebar_open .sb-icon-close{
-    display: inital !important;
+#nav-toggle:checked ~ .wrapper .sb-icon-close {
+    display: block !important;
 }
