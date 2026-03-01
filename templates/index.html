@@ -5,6 +5,9 @@
     <title>EITB2</title>
 
     <script>
+        document.querySelector(".sidebar_toggle").addEventListener("click", () => {
+            document.querySelector(".wrapper").classList.toggle("sidebar_open")
+        })
         function sendAction() {
             fetch("/do_action", {
                 method: "POST"
