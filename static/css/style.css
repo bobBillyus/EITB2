@@ -32,11 +32,23 @@
 }
 
 .sidebar {
-    /* display: none; */
+    display: none;
     width: 200px;
     flex-shrink: 0;
     padding: 20px;
     color: white;
     background: rgb(255, 140, 0);
     /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.35); */
+}
+
+.sidebar_open .sidebar{
+    display: inital;
+}
+
+.sidebar_open .sb-icon-open{
+    display: none !important
+}
+
+.sidebar_open .sb-icon-close{
+    display: inital !important
 }
