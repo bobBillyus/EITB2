@@ -3,7 +3,7 @@ import wikipediaapi
 #This API is just for finding related searches in case the wikipedia page the user enters doesn't exisit
 import wikipedia
 #This is the website backend api
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 #This is the library for the graph visual
 from dash import Dash, html, dcc, Input, Output, no_update, clientside_callback
 import dash_cytoscape as cyto
@@ -12,29 +12,28 @@ import dash_cytoscape as cyto
 user = wikipediaapi.Wikipedia(user_agent='EITB2 (aryand4120@gmail.com)', language='en')
 
 #Flask constructor
-app = Flask(__name__)   
+server = Flask(__name__)   
 
-@app.route('/', methods =["GET", "POST"])
+@server.route('/', methods =["GET", "POST"])
 def home():
-    srcpage = None
     if request.method == "POST":
-        userinput = request.form.get("wiki_page", None) 
-        page = user.page(userinput)
+        userinput = request.form.get("wiki_page", "") 
+        searchOptions = wikipedia.search(userinput)
 
-        if page.exists(): 
-            srcpage = page.title
+        if searchOptions:
+            return redirect(f'/graph/?page={searchOptions[0]}')
             
-    return render_template("index.html", result=srcpage)
+    return render_template("index.html")
 
 
-# #Setup Dash
-# app = Dash(__name__, server=app, url_base_pathname='/graph/')
+#Setup Dash
+app = Dash(__name__, server=server, url_base_pathname='/graph/')
 
-# #Empty div
-# app.layout = html.Div([
-#     dcc.Location(id='url', refresh=False),
-#     html.Div(id='graph-content')
-# ])
+#Empty div
+app.layout = html.Div([
+    dcc.Location(id='url', refresh=False),
+    html.Div(id='graph-content')
+])
 
 
 if __name__=='__main__':
