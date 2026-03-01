@@ -8,6 +8,31 @@
     padding: 20px;
 }
 
+/* Search bar */
+
+.search_box{
+    width: 600px;
+    background: #fff;
+    margin: 200px auto 0;
+    border-radius: 15px;
+
+}
+
+.row{
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+input{
+    flex: 1;
+    height: 50px;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    
+}
+
 /* Sidebar */
 
 .sidebar_toggle {
