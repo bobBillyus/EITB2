@@ -24,7 +24,7 @@
         <div class="main">
             <h1>EITB2</h1>
             <p>ahhhhhh</p>
-            <form action="{{ url_for('home') }}" method="post">
+            <!-- <form action="{{ url_for('home') }}" method="post">
                 <label for="page_query">Enter any Wikipedia page:</label>
                 <input 
                     type="text" 
@@ -34,12 +34,12 @@
                     required
                 >
                 <button type="submit">Search</button>
-            </form>
+            </form> -->
         </div>
         <div class="search_box">
             <div class="row">
-                <input type="text" id="input_box" placeholder="Search Wikipedia...">
-                <button><i class="fa-solid fa-magnifying-glass"></i></button>
+                <input type="text" name="wiki_page" id="input_box" placeholder="Search Wikipedia...">
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
         </div>
         <!-- Sidebar toggle button -->
