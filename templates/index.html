@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>EITB2</title>
 
-    <script src="https://kit.fontawesome.com/4089449204.js" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/4089449204.js" crossorigin="anonymous"></script>
+    <script>
         function togglesidebar() {
             const wrapper = document.querySelector(".wrapper");   
             if (wrapper) {
@@ -24,30 +25,8 @@
         <div class="main">
             <h1>EITB2</h1>
             <p>ahhhhhh</p>
-            <!-- <form action="{{ url_for('home') }}" method="post">
-                <label for="page_query">Enter any Wikipedia page:</label>
-                <input 
-                    type="text" 
-                    id="page_query" 
-                    name="wiki_page" 
-                    placeholder="Search Wikipedia..." 
-                    required
-                >
-                <button type="submit">Search</button>
-            </form> -->
-        <!-- </div>
-        <div class="search_box">
-            <div class="row">
-                <input type="text" name="wiki_page" id="input_box" placeholder="Search Wikipedia...">
-                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-            </div>
-        </div> -->
-        <form action="/" method="POST"> <div class="search_box">
-                <div class="row">
-                    <input type="text" name="wiki_page" id="input_box" placeholder="Search Wikipedia...">
-                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                </div>
-            </div>
+            
+        </div>
         </form>
         <!-- Sidebar toggle button -->
         <button class="sidebar_toggle" type="button" onclick="togglesidebar()">
