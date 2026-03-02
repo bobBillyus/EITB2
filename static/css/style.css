@@ -1,10 +1,10 @@
 .wrapper {
+    font-family: "Cascadia Mono", monospace;
     display: flex;
     min-height: 100vh;
 }
 
 .main {
-    font-family: cascadia-mono;
     flex-grow: 1;
     padding: 20px;
 }
