@@ -30,7 +30,7 @@ def live_search():
     data = request.get_json()
     query = data.get("query", "")
     search_options = wikipedia.search(query) 
-    return jsonify(search_options[1],search_options[2],search_options[4])
+    return jsonify(search_options[0-3])
 
 #Setup Dash
 app = Dash(__name__, server=server, url_base_pathname='/graph/')
