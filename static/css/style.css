@@ -12,6 +12,7 @@
 /* Search bar */
 
 .search_box{
+    font-family: "Cascadia Mono", monospace;
     width: 600px;
     background: #fff;
     margin: 200px auto 0;
