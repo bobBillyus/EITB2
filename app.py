@@ -29,8 +29,8 @@ def home():
 def live_search():
     data = request.get_json()
     query = data.get("query", "")
-    search_options = wikipediaapi.search(query) 
-    return jsonify(search_options[:5])
+    search_options = wikipedia.search(query, results=5) 
+    return jsonify(search_options)
 
 #Setup Dash
 app = Dash(__name__, server=server, url_base_pathname='/graph/')
