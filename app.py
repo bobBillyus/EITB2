@@ -31,7 +31,7 @@ def live_search():
     query = data.get("query", "")
 
     if len(query) >= 2:
-        search_options = wikipedia.search(query) 
+        search_options = wikipedia.suggest(query) 
     return jsonify(search_options[:5])
 
 #Setup Dash
