@@ -113,3 +113,9 @@ button .fa-solid{
     display: initial !important;
 }
 
+.suggestions ul li a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    width: 100%;
+}

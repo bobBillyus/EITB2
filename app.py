@@ -3,7 +3,7 @@ import wikipediaapi
 #This API is just for finding related searches in case the wikipedia page the user enters doesn't exisit
 import wikipedia
 #This is the website backend api
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
 #This is the library for the graph visual
 from dash import Dash, html, dcc, Input, Output, no_update, clientside_callback
 import dash_cytoscape as cyto
@@ -16,17 +16,23 @@ server = Flask(__name__)
 
 @server.route('/', methods =["GET", "POST"])
 def home():
-    if request.method == "POST":
-        userinput = request.form.get("wiki_page", "") 
-        searchOptions = wikipedia.search(userinput)
+    # if request.method == "POST":
+    #     userinput = request.form.get("wiki_page", "") 
+    #     searchOptions = wikipedia.search(userinput)
         
-
-        if searchOptions:
-            print(searchOptions)
-            return redirect(f'/graph/?page={searchOptions[0]}')
-            
+    #     if searchOptions:
+    #         print(searchOptions)
+    #         return redirect(f'/graph/?page={searchOptions[0]}')
     return render_template("index.html")
 
+@server.route('/live-search', methods=["POST"])
+def live_search():
+    data = request.get_json()
+    query = data.get("query", "")
+
+    if len(query) > 2:
+        search_options = wikipedia.search(query) 
+    return jsonify(search_options)
 
 #Setup Dash
 app = Dash(__name__, server=server, url_base_pathname='/graph/')
