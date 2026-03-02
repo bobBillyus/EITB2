@@ -19,8 +19,10 @@ def home():
     if request.method == "POST":
         userinput = request.form.get("wiki_page", "") 
         searchOptions = wikipedia.search(userinput)
+        
 
         if searchOptions:
+            print(searchOptions)
             return redirect(f'/graph/?page={searchOptions[0]}')
             
     return render_template("index.html")
