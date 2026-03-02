@@ -29,7 +29,7 @@ def home():
 def live_search():
     data = request.get_json()
     query = data.get("query", "")
-    search_options = wikipedia.search(query) 
+    search_options = wikipediaapi.search(query) 
     return jsonify(search_options[:5])
 
 #Setup Dash
