@@ -14,12 +14,9 @@ searchbar.onkeyup = async function() {
             body: JSON.stringify({ "query": query })
         }); 
         console.log('yolo')
-    }
         const suggestions = await response.json();
         console.log(suggestions)
-
-    
-
+    }
 }
 
 //     // Only search if the user typed more than 2 letters
