@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (query.length > 2) {
             try {
-                const response = await fetch('/live-search', {
+                const response = await fetch('/autocomplete', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ "query": query })
@@ -39,7 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function display(suggestions, container) {
-    // 1. Clear the box and hide it if there's nothing to show
     container.innerHTML = "";
     
     if (!suggestions || suggestions.length === 0) {
@@ -47,10 +46,9 @@ function display(suggestions, container) {
         return;
     }
 
-    // 2. Create the wrapper list
     const ul = document.createElement('ul');
 
-    // 3. Loop through results and create clickable items
+    //Loop through results and create clickable items
     suggestions.forEach((item) => {
         const li = document.createElement('li');
         li.textContent = item;
@@ -58,15 +56,14 @@ function display(suggestions, container) {
         li.onclick = function() {
             const searchbar = document.getElementById('searchbar');
             
-            // Set the search bar text to the clicked item
+            //Set the search bar text to the clicked item
             searchbar.value = item; 
             
-            // Hide the suggestions since we're done
             container.innerHTML = "";
             container.style.display = 'none';
             
-            // Optional: Automatically submit the form after clicking
-            // searchbar.closest('form').submit();
+            //Automatically submit the form after clicking
+            //searchbar.closest('form').submit();
         };
 
         ul.appendChild(li);

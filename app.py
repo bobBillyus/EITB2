@@ -16,17 +16,14 @@ server = Flask(__name__)
 
 @server.route('/', methods =["GET", "POST"])
 def home():
-    # if request.method == "POST":
-    #     userinput = request.form.get("wiki_page", "") 
-    #     searchOptions = wikipedia.search(userinput)
+    if request.method == "POST":
+        query = request.form.get("searchbar")
+        print(f"User searched for: {query}")
         
-    #     if searchOptions:
-    #         print(searchOptions)
-    #         return redirect(f'/graph/?page={searchOptions[0]}')
     return render_template("index.html")
 
 #Suggestions in search bar
-@server.route('/live-search', methods=["POST"])
+@server.route('/autocomplete', methods=["POST"])
 def live_search():
     data = request.get_json()
     query = data.get("query", "")
