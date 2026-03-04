@@ -13,9 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ "query": query })
             }); 
-            console.log('yolo')
             const suggestions = await response.json();
-            console.log(suggestions)
+            
+            result = suggestions.filter((keyword)=>{
+                return keyword.toLowerCase().includes(query.toLowerCase);
+            });
+            console.log(result);
         }
     }
 });
