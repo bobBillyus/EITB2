@@ -6,55 +6,84 @@
 
     <script src="https://kit.fontawesome.com/4089449204.js" crossorigin="anonymous"></script>
     <script>
-        // We wait for the page to load, then find our elements
         document.addEventListener('DOMContentLoaded', () => {
             const inputBox = document.getElementById('input_box');
             const suggestionBox = document.querySelector('.suggestions');
+            
+            // 1. Setup a controller to cancel pending requests
+            let abortController = null;
 
-            inputBox.onkeyup = async function() {
-                let query = inputBox.value;
+            // 2. Debounce function: waits for the user to stop typing
+            function debounce(func, delay) {
+                let timeout;
+                return function(...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), delay);
+                };
+            }
 
-                // Only search if the user typed more than 2 letters
+            // 3. The actual search logic
+            const performSearch = async () => {
+                let query = inputBox.value.trim();
+
+                // Cancel any existing request that hasn't finished yet
+                if (abortController) {
+                    abortController.abort();
+                }
+
                 if (query.length > 2) {
-                    const response = await fetch('/live-search', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ query: query })
-                    });
+                    // Create a new controller for this specific request
+                    abortController = new AbortController();
+                    
+                    try {
+                        const response = await fetch('/live-search', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({ query: query }),
+                            signal: abortController.signal // Link the abort signal
+                        });
 
-                    const results = await response.json();
-                    displayResults(results);
+                        const results = await response.json();
+                        displayResults(results);
+                    } catch (error) {
+                        if (error.name === 'AbortError') {
+                            // This is a "clean" exit because we cancelled the request
+                            console.log('Fetch aborted: newer search started.');
+                        } else {
+                            console.error('Search error:', error);
+                        }
+                    }
                 } else {
-                    // Clear suggestions if the input is too short
                     suggestionBox.innerHTML = "Suggestions will appear here";
                 }
             };
 
+            // Attach the debounced function (300ms is the sweet spot for responsiveness)
+            inputBox.onkeyup = debounce(performSearch, 300);
+
             function displayResults(results) {
-                if (!results.length) {
-                    suggestionBox.innerHTML = "";
+                if (!results || !results.length) {
+                    suggestionBox.innerHTML = "<ul><li>No results found</li></ul>";
                     return;
                 }
 
-                // Build the list items based on what Flask/Wikipedia sent back
                 const htmlRows = results.map((item) => {
                     return `<li><a href="/graph/?page=${encodeURIComponent(item)}">${item}</a></li>`;
                 });
-
-                // Inject the <ul> into your suggestions div
                 suggestionBox.innerHTML = `<ul>${htmlRows.join('')}</ul>`;
             }
         });
-
-        function togglesidebar() {
-            const wrapper = document.querySelector(".wrapper");   
-            if (wrapper) {
-                wrapper.classList.toggle("sidebar_open");
-            } else {
-                console.error("Error: Could not find the .wrapper element");
-            }
-            }
     </script>
+
+            function togglesidebar() {
+                const wrapper = document.querySelector(".wrapper");   
+                if (wrapper) {
+                    wrapper.classList.toggle("sidebar_open");
+                } else {
+                    console.error("Error: Could not find the .wrapper element");
+                }
+                }
+        </script>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/cascadia-mono/index.min.css">
@@ -74,8 +103,7 @@
                     <input type="text" name="wiki_page" id="input_box" placeholder="Search Wikipedia...">
                     <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
-
-
+    <!-- Suggestions -->
                 <div class="suggestions">
                     Suggestions will appear here
                 </div>

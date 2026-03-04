@@ -1,12 +1,12 @@
-#This is the main wikipedia api we will use
-import wikipediaapi
-#This API is just for finding related searches in case the wikipedia page the user enters doesn't exisit
-import wikipedia
-#This is the website backend api
-from flask import Flask, render_template, request, redirect, jsonify
-#This is the library for the graph visual
-from dash import Dash, html, dcc, Input, Output, no_update, clientside_callback
+#Apis and Libraries
+import wikipediaapi #This is the main wikipedia api we will use
+import wikipedia #This API is just for the suggestions in the search bar
+from flask import Flask, render_template, request, redirect, jsonify #This is the website backend api
+from dash import Dash, html, dcc, Input, Output, no_update, clientside_callback #This is the library for the graph visual
 import dash_cytoscape as cyto
+import requests #These help grab the links from the wikipedia page
+from bs4 import BeautifulSoup
+from urllib.parse import unquote #This makes it so it can read special characters
 
 #Initialize Wikipedia API
 user = wikipediaapi.Wikipedia(user_agent='EITB2 (aryand4120@gmail.com)', language='en')
@@ -25,12 +25,14 @@ def home():
     #         return redirect(f'/graph/?page={searchOptions[0]}')
     return render_template("index.html")
 
+#Suggestions in search bar
 @server.route('/live-search', methods=["POST"])
 def live_search():
     data = request.get_json()
     query = data.get("query", "")
     search_options = wikipedia.search(query, results=5) 
     return jsonify(search_options)
+
 
 #Setup Dash
 app = Dash(__name__, server=server, url_base_pathname='/graph/')
@@ -45,9 +47,56 @@ app.layout = html.Div([
 if __name__=='__main__':
    app.run(debug=True)
 
-test1=input()
-test = wikipedia.page(str(test1))
-print(wikipedia.links(test))
+# def get_main_body_links(page_title):
+#     print(page_title)
+#     formatted_title = page_title.replace(" ", "_")
+#     url = f"https://en.wikipedia.org/wiki/{formatted_title}"
+    
+#     headers = {'User-Agent': 'Link find test(aryand4120@gmail.com)'}
+
+#     response = requests.get(url, headers=headers)
+#     if response.status_code != 200:
+#         print(f"Error: Could not find page. Status code: {response.status_code}")
+#         return []
+
+#     soup = BeautifulSoup(response.content, 'html.parser')
+#     content = soup.find(id="mw-content-text").find(class_="mw-parser-output")
+    
+#     if not content:
+#         return []
+
+#     body_links = []
+#     stop_ids = {'Notes', 'References', 'External_links', 'See_also', 'Further_reading'}
+
+#     # Iterate through the elements in the main body
+#     for element in content.children:
+#         # Stop if we hit a bottom-page header
+#         if element.name in ['h2', 'h3']:
+#             headline = element.find(class_="mw-headline")
+#             if headline and headline.get('id') in stop_ids:
+#                 break
+        
+#         # Grab links from paragraphs and lists
+#         if element.name in ['p', 'ul', 'ol']:
+#             for a_tag in element.find_all('a', href=True):
+#                 href = a_tag['href']
+#                 # Ensure it's an internal wiki link and not a file/meta-page
+#                 if href.startswith('/wiki/') and ':' not in href:
+#                     # Clean the URL and handle special characters (like %C5%BE -> ž)
+#                     raw_title = href.replace('/wiki/', '').replace('_', ' ')
+#                     clean_title = unquote(raw_title)
+#                     body_links.append(clean_title)
+
+#     # Use a list comprehension to remove duplicates while keeping order
+#     seen = set()
+#     return [x for x in body_links if not (x in seen or seen.add(x))]
+
+# # Test it out
+# links = get_main_body_links("Torrence Parsons")
+# print(links)
+
+
+
 
 
 # #Setup Flask 
