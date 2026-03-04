@@ -1,24 +1,24 @@
 // We wait for the page to load, then find our elements
-// document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
 
-const searchbar = document.getElementById('searchbar');
-const suggestionBox = document.querySelector('.suggestions');
+    const searchbar = document.getElementById('searchbar');
+    const suggestionBox = document.querySelector('.suggestions');
 
-searchbar.onkeyup = async function() {
-    let result = [];
-    let query = searchbar.value;
-    if (query.length) {
-        const response = await fetch('/live-search', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ "query": query })
-        }); 
-        console.log('yolo')
-        const suggestions = await response.json();
-        console.log(suggestions)
+    searchbar.onkeyup = async function() {
+        let result = [];
+        let query = searchbar.value;
+        if (query.length) {
+            const response = await fetch('/live-search', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ "query": query })
+            }); 
+            console.log('yolo')
+            const suggestions = await response.json();
+            console.log(suggestions)
+        }
     }
-}
-
+});
 //     // Only search if the user typed more than 2 letters
 //     if (query.length > 2) {
 //         const response = await fetch('/live-search', {
