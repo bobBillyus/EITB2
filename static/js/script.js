@@ -17,6 +17,7 @@ searchbar.onkeyup = async function() {
         const suggestions = await response.json();
     
     console.log(suggestions)
+    console.log('yolo')
 }
 
 //     // Only search if the user typed more than 2 letters
