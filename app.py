@@ -7,6 +7,7 @@ import dash_cytoscape as cyto
 import requests #These help grab the links from the wikipedia page
 from bs4 import BeautifulSoup
 from urllib.parse import unquote #This makes it so it can read special characters
+from functools import lru_cache
 
 #Initialize Wikipedia API
 user = wikipediaapi.Wikipedia(user_agent='EITB2 (aryand4120@gmail.com)', language='en')
@@ -14,25 +15,31 @@ user = wikipediaapi.Wikipedia(user_agent='EITB2 (aryand4120@gmail.com)', languag
 #Flask constructor
 server = Flask(__name__)   
 
+@lru_cache(maxsize=100)
+def get_wiki_suggestions(query):
+    try:
+        return wikipedia.search(query, results=5)
+    except:
+        return []
+
 @server.route('/', methods =["GET", "POST"])
 def home():
-    # if request.method == "POST":
-    #     userinput = request.form.get("wiki_page", "") 
-    #     searchOptions = wikipedia.search(userinput)
-        
-    #     if searchOptions:
-    #         print(searchOptions)
-    #         return redirect(f'/graph/?page={searchOptions[0]}')
+    if request.method == "POST":
+        userinput = request.form.get("wiki_page", "") 
+        if userinput:
+            return redirect(f'/graph/?page={userinput}')
     return render_template("index.html")
 
 #Suggestions in search bar
 @server.route('/live-search', methods=["POST"])
 def live_search():
-    data = request.get_json()
-    query = data.get("query", "")
-    search_options = wikipedia.search(query, results=5) 
+    data = request.get_json() or {}
+    query = data.get("query", "").strip()
+    if len(query) < 3:
+        return jsonify([])
+    
+    search_options = get_wiki_suggestions(query)
     return jsonify(search_options)
-
 
 #Setup Dash
 app = Dash(__name__, server=server, url_base_pathname='/graph/')
@@ -40,9 +47,8 @@ app = Dash(__name__, server=server, url_base_pathname='/graph/')
 #Empty div
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
-    html.Div(id='graph-content')
+    html.Div(id='graph-content', children="Graph will load here...")
 ])
-
 
 if __name__=='__main__':
    server.run(debug=True)
