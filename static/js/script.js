@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const suggestionBox = document.querySelector('.suggestions');
 
     searchbar.onkeyup = async function() {
-        let result = [];
         let query = searchbar.value;
         if (query.length) {
             const response = await fetch('/live-search', {
@@ -14,14 +13,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ "query": query })
             }); 
             const suggestions = await response.json();
-            
-            result = suggestions.filter((keyword)=>{
-                return keyword.toLowerCase().includes(query.toLowerCase());
-            });
-            console.log(result);
         }
+        display(suggestions)
     }
 });
+
+function display(suggestions) {
+    const content = suggestions.map((list)=>{
+        return "<li>" + list + "</li>"
+    });
+
+    suggestionBox.innerHTML = "<ul>" + content + "</ul>"
+}
 //     // Only search if the user typed more than 2 letters
 //     if (query.length > 2) {
 //         const response = await fetch('/live-search', {
