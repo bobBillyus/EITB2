@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const suggestions = await response.json();
             
             result = suggestions.filter((keyword)=>{
-                return keyword.toLowerCase().includes(query.toLowerCase);
+                return keyword.toLowerCase().includes(query.toLowerCase());
             });
             console.log(result);
         }
