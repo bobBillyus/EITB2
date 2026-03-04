@@ -1,22 +1,29 @@
 // We wait for the page to load, then find our elements
 document.addEventListener('DOMContentLoaded', () => {
-
     const searchbar = document.getElementById('searchbar');
     const suggestionBox = document.querySelector('.suggestions');
 
     searchbar.onkeyup = async function() {
-        let query = searchbar.value;
-        if (query.length) {
-            const response = await fetch('/live-search', {
+        let query = searchbar.value.trim();
+
+        if (query.length > 2) {
+            try {
+                const response = await fetch('/live-search', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ "query": query })
             }); 
-
+            
+            const suggestions = await response.json();
+            display(suggestions)
+            }
+            catch {console.error(error)}
         }
-        const suggestions = await response.json();
-        display(suggestions)
-    }
+        
+        else {
+            suggestionBox.innerHTML ='yolo'
+        }
+    };
 });
 
 function display(suggestions) {
