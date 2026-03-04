@@ -12,8 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ "query": query })
             }); 
-            const suggestions = await response.json();
+
         }
+        const suggestions = await response.json();
         display(suggestions)
     }
 });
