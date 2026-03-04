@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const suggestions = await response.json();
             display(suggestions)
             }
-            catch {console.error(error)}
+            catch {console.error('oh no')}
         }
         
         else {
