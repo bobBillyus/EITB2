@@ -1,4 +1,4 @@
-# Apis and Libraries
+#Apis and Libraries
 import wikipediaapi #This is the main wikipedia api we will use
 import wikipedia #This API is just for the suggestions in the search bar
 from flask import Flask, render_template, request, redirect, jsonify #This is the website backend api
@@ -7,7 +7,6 @@ import dash_cytoscape as cyto
 import requests #These help grab the links from the wikipedia page
 from bs4 import BeautifulSoup
 from urllib.parse import unquote #This makes it so it can read special characters
-from functools import lru_cache # For speed optimization
 
 #Initialize Wikipedia API
 user = wikipediaapi.Wikipedia(user_agent='EITB2 (aryand4120@gmail.com)', language='en')
@@ -17,34 +16,21 @@ server = Flask(__name__)
 
 @server.route('/', methods =["GET", "POST"])
 def home():
-    if request.method == "POST":
-        userinput = request.form.get("wiki_page", "") 
-        if userinput:
-            # We use the first result if the user hits enter
-            search_options = get_wiki_suggestions(userinput)
-            if search_options:
-                return redirect(f'/graph/?page={search_options[0]}')
+    # if request.method == "POST":
+    #     userinput = request.form.get("wiki_page", "") 
+    #     searchOptions = wikipedia.search(userinput)
+        
+    #     if searchOptions:
+    #         print(searchOptions)
+    #         return redirect(f'/graph/?page={searchOptions[0]}')
     return render_template("index.html")
-
-# Internal helper with caching to make repeated searches instant
-@lru_cache(maxsize=100)
-def get_wiki_suggestions(query):
-    try:
-        # Direct API call is often faster than the library wrapper
-        return wikipedia.search(query, results=5)
-    except:
-        return []
 
 #Suggestions in search bar
 @server.route('/live-search', methods=["POST"])
 def live_search():
     data = request.get_json()
-    query = data.get("query", "").strip()
-    
-    if not query or len(query) < 3:
-        return jsonify([])
-
-    search_options = get_wiki_suggestions(query)
+    query = data.get("query", "")
+    search_options = wikipedia.search(query, results=5) 
     return jsonify(search_options)
 
 

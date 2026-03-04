@@ -1,78 +1,125 @@
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const inputBox = document.getElementById('input_box');
-        const suggestionBox = document.querySelector('.suggestions');
-        
-        let abortController = null;
-        let lastQuery = ""; // Prevent redundant API calls
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EITB2</title>
 
-        function debounce(func, delay) {
-            let timeout;
-            return function(...args) {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(this, args), delay);
-            };
-        }
+    <script src="https://kit.fontawesome.com/4089449204.js" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputBox = document.getElementById('input_box');
+            const suggestionBox = document.querySelector('.suggestions');
+            
+            // 1. Setup a controller to cancel pending requests
+            let abortController = null;
 
-        const performSearch = async () => {
-            let query = inputBox.value.trim();
-
-            // Optimization: Don't search if the query hasn't actually changed
-            if (query === lastQuery) return;
-            lastQuery = query;
-
-            if (abortController) abortController.abort();
-
-            if (query.length > 2) {
-                abortController = new AbortController();
-                
-                try {
-                    const response = await fetch('/live-search', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ query: query }),
-                        signal: abortController.signal
-                    });
-
-                    const results = await response.json();
-                    displayResults(results);
-                } catch (error) {
-                    if (error.name !== 'AbortError') console.error('Search error:', error);
-                }
-            } else {
-                suggestionBox.innerHTML = "Suggestions will appear here";
+            // 2. Debounce function: waits for the user to stop typing
+            function debounce(func, delay) {
+                let timeout;
+                return function(...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), delay);
+                };
             }
-        };
 
-        inputBox.onkeyup = debounce(performSearch, 250); // Dropped to 250ms for slightly faster feel
+            // 3. The actual search logic
+            const performSearch = async () => {
+                let query = inputBox.value.trim();
 
-        // Close suggestions when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!inputBox.contains(e.target) && !suggestionBox.contains(e.target)) {
-                suggestionBox.style.display = 'none';
+                // Cancel any existing request that hasn't finished yet
+                if (abortController) {
+                    abortController.abort();
+                }
+
+                if (query.length > 2) {
+                    // Create a new controller for this specific request
+                    abortController = new AbortController();
+                    
+                    try {
+                        const response = await fetch('/live-search', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({ query: query }),
+                            signal: abortController.signal // Link the abort signal
+                        });
+
+                        const results = await response.json();
+                        displayResults(results);
+                    } catch (error) {
+                        if (error.name === 'AbortError') {
+                            // This is a "clean" exit because we cancelled the request
+                            console.log('Fetch aborted: newer search started.');
+                        } else {
+                            console.error('Search error:', error);
+                        }
+                    }
+                } else {
+                    suggestionBox.innerHTML = "Suggestions will appear here";
+                }
+            };
+
+            // Attach the debounced function (300ms is the sweet spot for responsiveness)
+            inputBox.onkeyup = debounce(performSearch, 300);
+
+            function displayResults(results) {
+                if (!results || !results.length) {
+                    suggestionBox.innerHTML = "<ul><li>No results found</li></ul>";
+                    return;
+                }
+
+                const htmlRows = results.map((item) => {
+                    return `<li><a href="/graph/?page=${encodeURIComponent(item)}">${item}</a></li>`;
+                });
+                suggestionBox.innerHTML = `<ul>${htmlRows.join('')}</ul>`;
             }
         });
 
-        inputBox.onfocus = () => suggestionBox.style.display = 'block';
-
-        function displayResults(results) {
-            suggestionBox.style.display = 'block';
-            if (!results || !results.length) {
-                suggestionBox.innerHTML = "<ul><li>No results found</li></ul>";
-                return;
+        function togglesidebar() {
+            const wrapper = document.querySelector(".wrapper");   
+            if (wrapper) {
+                wrapper.classList.toggle("sidebar_open");
+            } else {
+                console.error("Error: Could not find the .wrapper element");
             }
+            }
+    </script>
 
-            const htmlRows = results.map((item) => {
-                return `<li><a href="/graph/?page=${encodeURIComponent(item)}">${item}</a></li>`;
-            });
-            suggestionBox.innerHTML = `<ul>${htmlRows.join('')}</ul>`;
-        }
-    });
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/cascadia-mono/index.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
 
-    function togglesidebar() {
-        const wrapper = document.querySelector(".wrapper");   
-        if (wrapper) {
-            wrapper.classList.toggle("sidebar_open");
-        }
-    }
-</script>
+<body>
+    <div class="wrapper sidebar_open">
+        <div class="main">
+            <h1>EITB2</h1>
+            <p>ahhhhhh</p>
+        </div>
+    <!-- Search bar -->
+        <form action="/" method="POST">
+            <div class="search_box">
+                <div class="row">
+                    <input type="text" name="wiki_page" id="input_box" placeholder="Search Wikipedia...">
+                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+    <!-- Suggestions -->
+                <div class="suggestions">
+                    Suggestions will appear here
+                </div>
+            </div>
+        </form>
+
+        <!-- Sidebar toggle button -->
+        <button class="sidebar_toggle" type="button" onclick="togglesidebar()">
+            <span class="material-icons sb-icon-open">keyboard_double_arrow_left</span>
+            <span class="material-icons sb-icon-close">keyboard_double_arrow_right</span>
+        </button>
+        
+        <!-- Sidebar -->
+        <div class="sidebar">
+            What is this?
+        </div>
+    </div>
+
+</body>
+</html>
