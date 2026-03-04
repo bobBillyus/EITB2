@@ -73,17 +73,16 @@
                 suggestionBox.innerHTML = `<ul>${htmlRows.join('')}</ul>`;
             }
         });
-    </script>
 
-            function togglesidebar() {
-                const wrapper = document.querySelector(".wrapper");   
-                if (wrapper) {
-                    wrapper.classList.toggle("sidebar_open");
-                } else {
-                    console.error("Error: Could not find the .wrapper element");
-                }
-                }
-        </script>
+        function togglesidebar() {
+            const wrapper = document.querySelector(".wrapper");   
+            if (wrapper) {
+                wrapper.classList.toggle("sidebar_open");
+            } else {
+                console.error("Error: Could not find the .wrapper element");
+            }
+            }
+    </script>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/cascadia-mono/index.min.css">

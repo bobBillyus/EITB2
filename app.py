@@ -45,7 +45,7 @@ app.layout = html.Div([
 
 
 if __name__=='__main__':
-   app.run(debug=True)
+   server.run(debug=True)
 
 # def get_main_body_links(page_title):
 #     print(page_title)
