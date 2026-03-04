@@ -39,14 +39,39 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function display(suggestions, container) {
+    // 1. Clear the box and hide it if there's nothing to show
+    container.innerHTML = "";
+    
     if (!suggestions || suggestions.length === 0) {
-        container.innerHTML = "<ul><li>No results found</li></ul>";
+        container.style.display = 'none';
         return;
     }
 
-    const htmlContent = suggestions.map((item) => {
-        return `<li>${item}</li>`;
-    }).join('');
+    // 2. Create the wrapper list
+    const ul = document.createElement('ul');
 
-    container.innerHTML = `<ul>${htmlContent}</ul>`;
+    // 3. Loop through results and create clickable items
+    suggestions.forEach((item) => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        
+        li.onclick = function() {
+            const searchbar = document.getElementById('searchbar');
+            
+            // Set the search bar text to the clicked item
+            searchbar.value = item; 
+            
+            // Hide the suggestions since we're done
+            container.innerHTML = "";
+            container.style.display = 'none';
+            
+            // Optional: Automatically submit the form after clicking
+            // searchbar.closest('form').submit();
+        };
+
+        ul.appendChild(li);
+    });
+
+    container.appendChild(ul);
+    container.style.display = 'block';
 }
