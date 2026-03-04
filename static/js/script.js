@@ -13,11 +13,13 @@ searchbar.onkeyup = async function() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ "query": query })
         }); 
+        console.log('yolo')
     }
         const suggestions = await response.json();
+        console.log(suggestions)
+
     
-    console.log(suggestions)
-    console.log('yolo')
+
 }
 
 //     // Only search if the user typed more than 2 letters
