@@ -139,7 +139,7 @@ input[type="text"] {
 }
 
 /* This class is added by JS when you press Arrow keys */
-.suggestions_container ul li button.focused {
+.suggestions_container ul:hover{
     background: #fff5e6; 
     color: rgb(255, 140, 0);
     outline: 2px solid rgb(255, 140, 0);
