@@ -103,4 +103,5 @@ input[type="text"] {
     align-items: center;
     justify-content: right;
     transition: transform 0.2s ease;
+    font-size: 20px;
 }
