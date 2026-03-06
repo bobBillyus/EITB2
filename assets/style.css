@@ -104,3 +104,9 @@ input[type="text"] {
     align-items: center;
     font-size: 20px;
 }
+
+.suggestions-container {
+    position: absolute;
+    z-index: 1000;
+    margin-top: -5px;
+}
