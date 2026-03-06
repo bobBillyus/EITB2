@@ -89,3 +89,14 @@ input[type="text"] {
     outline: 0;
     font-size: 18px;
 }
+
+#search-btn {
+    background: transparent;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
