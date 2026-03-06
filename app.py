@@ -46,7 +46,7 @@ app.layout = html.Div(className="wrapper", children=[
         
         html.Div(className="search_box", children=[
             html.Div(className="row", children=[
-                dcc.Input(id='search-input', type='text', placeholder='Search Wikipedia...', autoComplete="off"),
+                dcc.Input(id='search-input', type='text', placeholder='Search Wikipedia...', autoComplete="on"),
                 html.Button(html.I(className="fa-solid fa-magnifying-glass"), id='search-btn')
             ]),
             html.Div(id='suggestions-container', className="suggestions_container")
