@@ -48,33 +48,33 @@ app.layout = html.Div([
     dcc.Interval(id='interval-component', interval=1000, n_intervals=0)
 ])
 
-# 3. THE CRAWLER ENGINE (The Background Thread)
 def find_paths(start_title):
     global state
     target = "Tuberculosis"
     
-    # Simple BFS logic
-    queue = [(start_title, [])]
-    visited = {start_title}
-    
     page = wiki_api.page(start_title)
     if not page.exists(): return
 
-    # Adding the first node
+    # 1. Add the starting node
     with data_lock:
         state["elements"].append({'data': {'id': start_title, 'label': start_title}})
 
+    # 2. Get links and add them to the graph
     links = page.links
     for title in sorted(links.keys()):
-        # Limit to first 50 links to avoid getting banned/lagging
-        if len(state["elements"]) > 100: break 
+        # Limit to avoid hitting API rate limits or crashing the browser
+        if len(state["elements"]) > 150: 
+            break 
         
         with data_lock:
+            # Add the new node
             state["elements"].append({'data': {'id': title, 'label': title}})
-            state["elements"].append({'data': {'source': start_node, 'target': title}})
+            # Add the edge from start_title to this new title
+            state["elements"].append({'data': {'source': start_title, 'target': title}})
         
         if title == target:
             state["found"] = True
+            print("Found Tuberculosis!")
             break
 
 # 4. CALLBACKS (Replacing your JS and Flask Routes)
