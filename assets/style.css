@@ -93,7 +93,7 @@ input[type="text"] {
 #search-btn {
     background: transparent;
     border: none;
-    padding: 10px;
+    padding: 5px;
     cursor: pointer;
     display: flex;
     align-items: center;
