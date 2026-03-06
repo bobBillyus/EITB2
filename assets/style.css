@@ -138,13 +138,6 @@ input[type="text"] {
     transition: background 0.1s;
 }
 
-.suggestions_container ul li button.focused {
-    background: #fff5e6; 
-    color: rgb(255, 140, 0);
-    outline: 2px solid rgb(255, 140, 0);
-    outline-offset: -2px;
-}
-
 .suggestions_container ul li button:hover {
-    background: red;
+    background: purple;
 }
