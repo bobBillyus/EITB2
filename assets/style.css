@@ -82,7 +82,7 @@ body, html {
 .row {
     display: flex;
     align-items: center;
-    padding: 10px 20px;
+    padding: 10px 15px;
     justify-content: space-between;
 }
 
