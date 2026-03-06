@@ -40,14 +40,15 @@
     left: 20px;
 }
 
-/* Main content area adjustment */
 .main {
     flex-grow: 1;
+    flex-basis: 0;   /* Forces it to calculate width based on remaining space */
+    min-width: 0;    /* Prevents flex children from overflowing */
     padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: margin-left 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 
 /* When expanded, remove the phantom margin */
