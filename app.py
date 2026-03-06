@@ -123,4 +123,4 @@ def update_graph_live(n):
         return list(state["elements"])
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run(debug=True)
