@@ -20,7 +20,8 @@ state = {
 external_stylesheets = [
     'https://cdn.jsdelivr.net/npm/@fontsource/cascadia-mono/index.min.css',
     'https://fonts.googleapis.com/icon?family=Material+Icons',
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css']
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css',
+    ]
 
 app = Dash(__name__, external_stylesheets=external_stylesheets)
 

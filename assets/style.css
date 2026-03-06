@@ -1,0 +1,117 @@
+/* Ensure the app takes up the full screen */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.wrapper {
+    font-family: "Cascadia Mono", monospace;
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.main {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the search bar */
+}
+
+/* Search bar container */
+.search_box {
+    width: 600px;
+    background: #fff;
+    margin: 50px auto 20px; /* Reduced top margin to make room for the graph */
+    border-radius: 15px;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+/* Dash dcc.Input specific styling */
+input[type="text"] {
+    font-family: "Cascadia Mono", monospace !important;
+    flex: 1;
+    height: 50px;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    font-size: 18px;
+}
+
+.search_btn {
+    background: transparent;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+}
+
+.search_btn i {
+    color: #555;
+    font-size: 22px;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    padding: 20px;
+    color: white;
+    background: rgb(255, 140, 0);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    display: block; /* Default to visible */
+}
+
+/* When the sidebar is 'closed', we'll use a class to hide it */
+.sidebar.hidden {
+    display: none;
+}
+
+/* Suggestion Box (Matches your Python structure) */
+.suggestions_container {
+    position: absolute;
+    width: 100%;
+    background: white;
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.suggestions_container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid #eee;
+}
+
+.suggestions_container ul li button {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 15px 20px;
+    font-family: "Cascadia Mono", monospace;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.suggestions_container ul li button:hover {
+    background: #e9f3ff;
+}
+
+/* Cytoscape Container styling */
+#cytoscape-graph {
+    border-radius: 15px;
+    background-color: #fcfcfc;
+    margin-top: 20px;
+}
