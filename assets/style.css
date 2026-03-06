@@ -107,7 +107,15 @@ input[type="text"] {
     position: absolute;
     z-index: 1000;
     margin-top: -5px;
-    list-style-type: none;
+    width: 100%; /* Ensures it matches the width of the search box */
+    background-color: white; 
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.suggestions_container ul{
+    list-style: none;
 }
 
 /* The default state of a suggestion */
