@@ -102,10 +102,47 @@ clientside_callback(
     Input('sidebar-toggle', 'n_clicks'),
 )
 
+# 1. Update your existing suggestions callback to clear on click
 @app.callback(
-    Output('suggestions-container', 'children'),
-    Input('search-input', 'value')
+    Output('suggestions-container', 'children', allow_duplicate=True),
+    Input('search-input', 'value'),
+    prevent_initial_call=True
 )
+def update_suggestions(val):
+    if not val or len(val) < 3: 
+        return []
+    try:
+        options = wikipedia.search(val, results=5)
+    except:
+        return []
+    
+    return html.Ul([
+        html.Li(html.Button(opt, id={'type': 'suggest-item', 'index': opt}, className="suggestion-btn")) 
+        for opt in options
+    ])
+
+# 2. NEW CALLBACK: Handle clicking a suggestion
+@app.callback(
+    Output('search-input', 'value'),
+    Output('suggestions-container', 'children'),
+    Input({'type': 'suggest-item', 'index': ALL}, 'n_clicks'),
+    State({'type': 'suggest-item', 'index': ALL}, 'id'),
+    prevent_initial_call=True
+)
+def select_suggestion(n_clicks, ids):
+    ctx = dash.callback_context
+    if not ctx.triggered:
+        return dash.no_update, dash.no_update
+    
+    # Find which suggestion was clicked
+    clicked_id = ctx.triggered[0]['prop_id'].split('.')[0]
+    # Parse the dictionary string back to a dict to get the 'index' (the word)
+    import json
+    clicked_index = json.loads(clicked_id.replace("'", '"'))['index']
+    
+    # Return the word to the input and EMPTY the suggestions
+    return clicked_index, []
+
 def update_suggestions(val):
     if not val or len(val) < 3: return []
     options = wikipedia.search(val, results=5)

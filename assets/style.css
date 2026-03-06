@@ -143,3 +143,9 @@ input[type="text"] {
     background: #fff5e6; 
     color: rgb(255, 140, 0);
 }
+
+.suggestions_container:empty {
+    display: none;
+    border: none;
+    box-shadow: none;
+}
