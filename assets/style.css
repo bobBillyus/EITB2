@@ -105,12 +105,16 @@ input[type="text"] {
 
 .suggestions_container {
     position: absolute;
+    z-index: 1000;
     margin-top: -5px;
-    width: 100%; /* Ensures it matches the width of the search box */
+    width: 100%; 
     background-color: white; 
     border-radius: 0 0 15px 15px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    overflow: hidden;
+    height: auto; 
+    max-height: 300px;
+    overflow-y: auto; 
+    overflow-x: hidden;
 }
 
 .suggestions_container ul{
@@ -118,6 +122,7 @@ input[type="text"] {
     padding: 0;
     margin: 0;
 }
+
 
 /* The default state of a suggestion */
 .suggestions_container ul li button {
