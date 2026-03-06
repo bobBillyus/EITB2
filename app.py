@@ -126,15 +126,27 @@ clientside_callback(
     Input('suggestions-container', 'id'),
 )
 
-# Update Suggestions while typing
+# Update Suggestions while typing OR clearing when clicking away
 @app.callback(
     Output('suggestions-container', 'children', allow_duplicate=True),
     Input('search-input', 'value'),
+    Input('search-input', 'n_blur'), # Triggers when you click outside
     prevent_initial_call=True
 )
-def update_suggestions(val):
+def update_suggestions(val, n_blur):
+    ctx = dash.callback_context
+    triggered_id = ctx.triggered[0]['prop_id'].split('.')[0]
+
+    # If the user clicked outside (blur), clear the suggestions
+    if triggered_id == 'search-input' and ctx.triggered[0]['value'] is None:
+        # We need a tiny delay or it clears BEFORE the click on the button registers
+        import time
+        time.sleep(0.1) 
+        return []
+
     if not val or len(val) < 3: 
         return []
+        
     try:
         options = wikipedia.search(val, results=5)
         return html.Ul([
@@ -144,7 +156,7 @@ def update_suggestions(val):
     except:
         return []
 
-# Handle clicking a suggestion
+# Handle clicking a suggestion (Remains mostly the same)
 @app.callback(
     Output('search-input', 'value'),
     Output('suggestions-container', 'children'),
@@ -152,11 +164,10 @@ def update_suggestions(val):
     prevent_initial_call=True
 )
 def select_suggestion(n_clicks):
-    ctx = dash.callback_context
-    if not ctx.triggered or not any(n_clicks):
+    if not any(n_clicks):
         return dash.no_update, dash.no_update
     
-    # Get the index (the title) from the triggered ID
+    ctx = dash.callback_context
     clicked_id_str = ctx.triggered[0]['prop_id'].split('.')[0]
     clicked_id = json.loads(clicked_id_str)
     
