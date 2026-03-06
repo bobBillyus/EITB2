@@ -1,148 +1,126 @@
 import threading
 import wikipediaapi
 import wikipedia
-from dash import Dash, html, dcc, Input, Output, State
+import dash
+from dash import Dash, html, dcc, Input, Output, State, ALL, callback_context
 import dash_cytoscape as cyto
 
-# 1. Global State
+# 1. SETUP & GLOBAL DATA
+user_agent = 'EITB2 (aryand4120@gmail.com)'
+wiki_api = wikipediaapi.Wikipedia(user_agent=user_agent, language='en')
+
 data_lock = threading.Lock()
-graph_data = {
+# This dictionary is the "brain" shared by the crawler and the website
+state = {
     "elements": [],
-    "is_searching": False,
-    "target": "Tuberculosis"
+    "searching": False,
+    "found": False,
+    "start_node": ""
 }
 
 app = Dash(__name__)
 
-# 2. The Layout (Replaces your HTML file)
+# 2. LAYOUT (No more index.html needed!)
 app.layout = html.Div([
-    html.H1("Wikipedia Path Finder"),
+    html.H1("Wikipedia Path to Tuberculosis", style={'textAlign': 'center', 'fontFamily': 'Cascadia Mono'}),
     
-    # Search Section
     html.Div([
-        dcc.Input(id='search-input', type='text', placeholder='Start page...', autocomplete='off'),
-        html.Button('Find Path', id='search-btn', n_clicks=0),
-        html.Ul(id='suggestions-list', style={'listStyle': 'none', 'padding': 0})
-    ]),
+        dcc.Input(id='search-input', type='text', placeholder='Enter a starting page...', 
+                  style={'width': '300px', 'padding': '10px'}),
+        html.Button('Search', id='search-btn', n_clicks=0, style={'padding': '10px'}),
+        html.Div(id='suggestions-container', style={'position': 'absolute', 'zIndex': '1000'})
+    ], style={'textAlign': 'center', 'marginBottom': '20px'}),
 
-    # The Graph
+    # The Graph Display
     cyto.Cytoscape(
         id='cytoscape-graph',
         layout={'name': 'breadthfirst'},
-        style={'width': '100%', 'height': '600px'},
-        elements=[]
+        style={'width': '100%', 'height': '600px', 'border': '1px solid #ccc'},
+        elements=[],
+        stylesheet=[
+            {'selector': 'node', 'style': {'content': 'data(label)', 'background-color': '#0074D9', 'color': 'white'}},
+            {'selector': '[id = "Tuberculosis"]', 'style': {'background-color': 'red', 'shape': 'diamond'}},
+            {'selector': 'edge', 'style': {'line-color': '#999', 'width': 2, 'curve-style': 'bezier'}}
+        ]
     ),
 
-    # The "Pulse" (checks for updates every 1 second)
-    dcc.Interval(id='graph-update-timer', interval=1000)
+    # The Heartbeat (checks for new data every 1 second)
+    dcc.Interval(id='interval-component', interval=1000, n_intervals=0)
 ])
-# def get_main_body_links(page_title):
-#     print(page_title)
-#     formatted_title = page_title.replace(" ", "_")
-#     url = f"https://en.wikipedia.org/wiki/{formatted_title}"
+
+# 3. THE CRAWLER ENGINE (The Background Thread)
+def find_paths(start_title):
+    global state
+    target = "Tuberculosis"
     
-#     headers = {'User-Agent': 'Link find test(aryand4120@gmail.com)'}
-
-#     response = requests.get(url, headers=headers)
-#     if response.status_code != 200:
-#         print(f"Error: Could not find page. Status code: {response.status_code}")
-#         return []
-
-#     soup = BeautifulSoup(response.content, 'html.parser')
-#     content = soup.find(id="mw-content-text").find(class_="mw-parser-output")
+    # Simple BFS logic
+    queue = [(start_title, [])]
+    visited = {start_title}
     
-#     if not content:
-#         return []
+    page = wiki_api.page(start_title)
+    if not page.exists(): return
 
-#     body_links = []
-#     stop_ids = {'Notes', 'References', 'External_links', 'See_also', 'Further_reading'}
+    # Adding the first node
+    with data_lock:
+        state["elements"].append({'data': {'id': start_title, 'label': start_title}})
 
-#     # Iterate through the elements in the main body
-#     for element in content.children:
-#         # Stop if we hit a bottom-page header
-#         if element.name in ['h2', 'h3']:
-#             headline = element.find(class_="mw-headline")
-#             if headline and headline.get('id') in stop_ids:
-#                 break
+    links = page.links
+    for title in sorted(links.keys()):
+        # Limit to first 50 links to avoid getting banned/lagging
+        if len(state["elements"]) > 100: break 
         
-#         # Grab links from paragraphs and lists
-#         if element.name in ['p', 'ul', 'ol']:
-#             for a_tag in element.find_all('a', href=True):
-#                 href = a_tag['href']
-#                 # Ensure it's an internal wiki link and not a file/meta-page
-#                 if href.startswith('/wiki/') and ':' not in href:
-#                     # Clean the URL and handle special characters (like %C5%BE -> ž)
-#                     raw_title = href.replace('/wiki/', '').replace('_', ' ')
-#                     clean_title = unquote(raw_title)
-#                     body_links.append(clean_title)
+        with data_lock:
+            state["elements"].append({'data': {'id': title, 'label': title}})
+            state["elements"].append({'data': {'source': start_node, 'target': title}})
+        
+        if title == target:
+            state["found"] = True
+            break
 
-#     # Use a list comprehension to remove duplicates while keeping order
-#     seen = set()
-#     return [x for x in body_links if not (x in seen or seen.add(x))]
+# 4. CALLBACKS (Replacing your JS and Flask Routes)
 
-# # Test it out
-# links = get_main_body_links("Torrence Parsons")
-# print(links)
+# Callback: Autocomplete Suggestions
+@app.callback(
+    Output('suggestions-container', 'children'),
+    Input('search-input', 'value')
+)
+def update_suggestions(val):
+    if not val or len(val) < 3: return []
+    options = wikipedia.search(val, results=5)
+    return html.Ul([
+        html.Li(html.Button(opt, id={'type': 'suggest-item', 'index': opt}, 
+                style={'width': '300px', 'textAlign': 'left'})) 
+        for opt in options
+    ], style={'listStyle': 'none', 'padding': 0, 'background': 'white', 'border': '1px solid #ddd'})
 
+# Callback: Start Search when Button Clicked
+@app.callback(
+    Output('search-btn', 'disabled'),
+    Input('search-btn', 'n_clicks'),
+    State('search-input', 'value'),
+    prevent_initial_call=True
+)
+def start_search(n, start_val):
+    if n > 0 and start_val:
+        global state
+        with data_lock:
+            state["elements"] = [] # Reset graph
+            state["start_node"] = start_val
+        
+        # Start the background thread
+        thread = threading.Thread(target=find_paths, args=(start_val,))
+        thread.start()
+        return True
+    return False
 
+# Callback: Update Graph Visuals Every Second
+@app.callback(
+    Output('cytoscape-graph', 'elements'),
+    Input('interval-component', 'n_intervals')
+)
+def update_graph_live(n):
+    with data_lock:
+        return list(state["elements"])
 
-
-
-# #Setup Flask 
-# server = Flask(__name__)
-
-# @server.route('/', methods=['GET', 'POST'])
-# def home():
-#     result = None
-#     suggestions = None
-#     query_for_graph = "" # This will be passed to the iframe
-
-#     if request.method == 'POST':
-#         user_query = request.form.get('wiki_page')
-
-#         if user_query:
-#             page = user.page(user_query)
-#             if page.exists() == True:
-#                 query_for_graph = user_query # Set this to update the iframe
-#                 result = {'title': page.title}
-#             else:
-#                 suggestions = wikipedia.search(user_query)
-
-#     return render_template('index.html', suggestions=suggestions, result=result, query=query_for_graph)
-
-# # 2. Setup Dash
-# app = Dash(__name__, server=server, url_base_pathname='/graph/')
-
-# #Empty div
-# app.layout = html.Div([
-#     dcc.Location(id='url', refresh=False),
-#     html.Div(id='graph-content')
-# ])
-
-# # 4. The Callback: This builds the graph ONLY after the URL changes
-# @app.callback(
-#     Output('graph-content', 'children'),
-#     Input('url', 'search') # This watches the "?name=..." part of the URL
-# )
-# def update_graph(search):
-#     if not search:
-#         return html.P("Search for a page to generate the graph.")
-    
-#     # Extract the page name from the URL (?name=PageName)
-#     page_name = search.split('=')[-1].replace('%20', ' ')
-#     page = user.page(page_name)
-    
-#     if not page.exists():
-#         return html.P("Page data not available for graph.")
-
-#     # NOW we create the elements dynamically
-#     return cyto.Cytoscape(
-#         id='cytoscape',
-#         elements=[
-#             {'data': {'id': 'srcpage', 'label': page.title,'url': page.fullurl}},
-#             {'data': {'id': 'on', 'label': 'Ontario'}},
-#             {'data': {'id': 'e1', 'source': 'srcpage', 'target': 'on'}},
-#         ],
-#         layout={'name': 'breadthfirst'},
-#         style={'width': '100%', 'height': '500px'}
-#     )
+if __name__ == '__main__':
+    app.run_server(debug=True)
