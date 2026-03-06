@@ -106,15 +106,17 @@ clientside_callback(
     Input('sidebar-toggle', 'n_clicks'),
 )
 
-# Click Outside to Close Suggestions
+#click outside callback
 clientside_callback(
     """
     function(n_clicks) {
         document.onclick = function(e){
             const container = document.getElementById('suggestions-container');
             const input = document.getElementById('search-input');
+            // If we clicked outside, we just return a dummy value to trigger the clear
             if (container && e.target !== input && !container.contains(e.target)) {
-                container.innerHTML = '';
+                // We use a custom event or just focus the body to trigger a blur
+                document.body.click(); 
             }
         };
         return window.dash_clientside.no_update;
