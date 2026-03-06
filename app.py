@@ -1,49 +1,41 @@
-#Apis and Libraries
-import wikipediaapi #This is the main wikipedia api we will use
-import wikipedia #This API is just for the suggestions in the search bar
-from flask import Flask, render_template, request, redirect, jsonify #This is the website backend api
-from dash import Dash, html, dcc, Input, Output, no_update, clientside_callback #This is the library for the graph visual
+import threading
+import wikipediaapi
+import wikipedia
+from dash import Dash, html, dcc, Input, Output, State
 import dash_cytoscape as cyto
-import requests #These help grab the links from the wikipedia page
-from bs4 import BeautifulSoup
-from urllib.parse import unquote #This makes it so it can read special characters
 
-#Initialize Wikipedia API
-user = wikipediaapi.Wikipedia(user_agent='EITB2 (aryand4120@gmail.com)', language='en')
+# 1. Global State
+data_lock = threading.Lock()
+graph_data = {
+    "elements": [],
+    "is_searching": False,
+    "target": "Tuberculosis"
+}
 
-#Flask constructor
-server = Flask(__name__)   
+app = Dash(__name__)
 
-@server.route('/', methods =["GET", "POST"])
-def home():
-    if request.method == "POST":
-        query = request.form.get("searchbar")
-        print(f"User searched for: {query}")
-        
-    return render_template("index.html")
-
-#Suggestions in search bar
-@server.route('/autocomplete', methods=["POST"])
-def live_search():
-    data = request.get_json()
-    query = data.get("query", "")
-    search_options = wikipedia.search(query, results=5) 
-    return jsonify(search_options)
-
-
-#Setup Dash
-app = Dash(__name__, server=server, url_base_pathname='/graph/')
-
-#Empty div
+# 2. The Layout (Replaces your HTML file)
 app.layout = html.Div([
-    dcc.Location(id='url', refresh=False),
-    html.Div(id='graph-content')
+    html.H1("Wikipedia Path Finder"),
+    
+    # Search Section
+    html.Div([
+        dcc.Input(id='search-input', type='text', placeholder='Start page...', autocomplete='off'),
+        html.Button('Find Path', id='search-btn', n_clicks=0),
+        html.Ul(id='suggestions-list', style={'listStyle': 'none', 'padding': 0})
+    ]),
+
+    # The Graph
+    cyto.Cytoscape(
+        id='cytoscape-graph',
+        layout={'name': 'breadthfirst'},
+        style={'width': '100%', 'height': '600px'},
+        elements=[]
+    ),
+
+    # The "Pulse" (checks for updates every 1 second)
+    dcc.Interval(id='graph-update-timer', interval=1000)
 ])
-
-
-if __name__=='__main__':
-   server.run(debug=True)
-
 # def get_main_body_links(page_title):
 #     print(page_title)
 #     formatted_title = page_title.replace(" ", "_")
