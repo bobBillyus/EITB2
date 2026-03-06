@@ -22,30 +22,40 @@ app = Dash(__name__)
 
 # 2. LAYOUT (No more index.html needed!)
 app.layout = html.Div([
-    html.H1("Wikipedia Path to Tuberculosis", style={'textAlign': 'center', 'fontFamily': 'Cascadia Mono'}),
-    
+    # 1. The Sidebar
     html.Div([
-        dcc.Input(id='search-input', type='text', placeholder='Enter a starting page...', 
-                  style={'width': '300px', 'padding': '10px'}),
-        html.Button('Search', id='search-btn', n_clicks=0, style={'padding': '10px'}),
-        html.Div(id='suggestions-container', style={'position': 'absolute', 'zIndex': '1000'})
-    ], style={'textAlign': 'center', 'marginBottom': '20px'}),
+        html.H2("About EITB2"),
+        html.P("This tool finds the shortest path between any Wikipedia page and Tuberculosis."),
+        html.Hr(),
+        html.P("Status:"),
+        html.Div(id='status-indicator', children="Waiting for search...")
+    ], id='sidebar', style={
+        'position': 'fixed', 'top': 0, 'left': 0, 'bottom': 0,
+        'width': '250px', 'padding': '20px', 'backgroundColor': '#f8f9fa',
+        'borderRight': '1px solid #ddd', 'zIndex': 100
+    }),
 
-    # The Graph Display
-    cyto.Cytoscape(
-        id='cytoscape-graph',
-        layout={'name': 'breadthfirst'},
-        style={'width': '100%', 'height': '600px', 'border': '1px solid #ccc'},
-        elements=[],
-        stylesheet=[
-            {'selector': 'node', 'style': {'content': 'data(label)', 'background-color': '#0074D9', 'color': 'white'}},
-            {'selector': '[id = "Tuberculosis"]', 'style': {'background-color': 'red', 'shape': 'diamond'}},
-            {'selector': 'edge', 'style': {'line-color': '#999', 'width': 2, 'curve-style': 'bezier'}}
-        ]
-    ),
+    # 2. Main Content Area (Shifted to the right to make room for sidebar)
+    html.Div([
+        html.H1("EITB2: Wikipedia Path Finder"),
+        
+        # Search Box
+        html.Div([
+            dcc.Input(id='search-input', type='text', placeholder='Search Wikipedia...'),
+            html.Button('Search', id='search-btn', n_clicks=0),
+            html.Div(id='suggestions-container')
+        ], style={'marginBottom': '30px'}),
 
-    # The Heartbeat (checks for new data every 1 second)
-    dcc.Interval(id='interval-component', interval=1000, n_intervals=0)
+        # The Graph
+        cyto.Cytoscape(
+            id='cytoscape-graph',
+            layout={'name': 'breadthfirst'},
+            style={'width': '100%', 'height': '600px'},
+            elements=[]
+        ),
+        
+        dcc.Interval(id='interval-component', interval=1000)
+    ], style={'marginLeft': '270px', 'padding': '20px'}) # This marginLeft is the key!
 ])
 
 def find_paths(start_title):
