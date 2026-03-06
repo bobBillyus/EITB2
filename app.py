@@ -126,23 +126,31 @@ clientside_callback(
     Input('suggestions-container', 'id'),
 )
 
-# Update Suggestions while typing
 @app.callback(
-    Output('suggestions-container', 'children', allow_duplicate=True),
+    [Output('suggestions-container', 'children', allow_duplicate=True),
+     Output('suggestions-container', 'className')],
     Input('search-input', 'value'),
     prevent_initial_call=True
 )
 def update_suggestions(val):
     if not val or len(val) < 3: 
-        return []
+        return [], "suggestions_container" # Hidden state
+    
     try:
         options = wikipedia.search(val, results=5)
-        return html.Ul([
+        if not options:
+            return [], "suggestions_container"
+            
+        # Create the list
+        children = html.Ul([
             html.Li(html.Button(opt, id={'type': 'suggest-item', 'index': opt})) 
             for opt in options
         ])
+        
+        # Return the children AND the visible class
+        return children, "suggestions_container visible"
     except:
-        return []
+        return [], "suggestions_container"
 
 # Handle clicking a suggestion
 @app.callback(
