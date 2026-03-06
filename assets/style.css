@@ -19,7 +19,7 @@ body, html {
     width: 250px;
     min-width: 250px;
     flex-shrink: 0;
-    padding: 20px;
+    padding: 10px;
     color: white;
     background: rgb(255, 140, 0);
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
