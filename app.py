@@ -6,6 +6,7 @@ import json
 from dash import Dash, html, dcc, Input, Output, State, ALL, callback_context, clientside_callback
 import dash_cytoscape as cyto
 
+#Wikipedia setup
 user_agent = 'EITB2 (aryand4120@gmail.com)'
 wiki_api = wikipediaapi.Wikipedia(user_agent=user_agent, language='en')
 
@@ -26,7 +27,7 @@ external_stylesheets = [
 app = Dash(__name__, external_stylesheets=external_stylesheets)
 
 app.layout = html.Div(className="wrapper", children=[
-    # 1. Sidebar
+    #Sidebar
     html.Div([
         html.H2("About EITB2"),
         html.P("Shortest path to Tuberculosis."),
@@ -34,7 +35,7 @@ app.layout = html.Div(className="wrapper", children=[
         html.Div(id='status-indicator', children="Waiting...")
     ], id='sidebar', className='sidebar'),
 
-    # 2. Main Area
+    #Main Area
     html.Div(className="main", id="main-content", children=[
         html.Button(
             html.I(className="material-icons", id="toggle-icon", children="double_arrow"),
@@ -44,15 +45,18 @@ app.layout = html.Div(className="wrapper", children=[
         ),
         
         html.H1("EITB2: Wikipedia Path Finder"),
-        
+    
+    #Search bar
         html.Div(className="search_box", children=[
             html.Div(className="row", children=[
                 dcc.Input(id='search-input', type='text', placeholder='Search Wikipedia...', autoComplete="off"),
                 html.Button(html.I(className="fa-solid fa-magnifying-glass"), id='search-btn')
             ]),
+    #Suggestions
             html.Div(id='suggestions-container', className="suggestions_container")
         ]),
 
+    #Graph
         cyto.Cytoscape(
             id='cytoscape-graph',
             layout={'name': 'breadthfirst'},
