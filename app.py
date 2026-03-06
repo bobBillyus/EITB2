@@ -18,10 +18,15 @@ state = {
     "start_node": ""
 }
 
-app = Dash(__name__)
+external_stylesheets = [
+    'https://cdn.jsdelivr.net/npm/@fontsource/cascadia-mono/index.min.css',
+    'https://fonts.googleapis.com/icon?family=Material+Icons',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css']
+
+app = Dash(__name__, external_stylesheets=external_stylesheets)
 
 # 2. LAYOUT (No more index.html needed!)
-app.layout = html.Div([
+app.layout = html.Div(style={'fontFamily': '"Cascadia Mono", monospace'}, children=[
     # 1. The Sidebar
     html.Div([
         html.H2("About EITB2"),
