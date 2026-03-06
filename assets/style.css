@@ -109,3 +109,29 @@ input[type="text"] {
     margin-top: -5px;
     background-color: orange;
 }
+
+/* The default state of a suggestion */
+.suggestions_container ul li button {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 12px 20px;
+    font-family: "Cascadia Mono", monospace;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+/* This class is added by JS when you press Arrow keys */
+.suggestions_container ul li button.focused {
+    background: #fff5e6; 
+    color: rgb(255, 140, 0);
+    outline: 2px solid rgb(255, 140, 0);
+    outline-offset: -2px;
+}
+
+/* Hover still works alongside keyboard focus */
+.suggestions_container ul li button:hover {
+    background: #fff5e6;
+}
