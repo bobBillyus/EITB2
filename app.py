@@ -90,10 +90,10 @@ clientside_callback(
         
         if (n_clicks % 2 !== 0) {
             sidebar.classList.add('hidden');
-            icon.style.transform = 'rotate(0deg)'; // Points >>
+            icon.style.transform = 'rotate(0deg)'; // Points <<
         } else {
             sidebar.classList.remove('hidden');
-            icon.style.transform = 'rotate(180deg)'; // Points <<
+            icon.style.transform = 'rotate(180deg)'; // Points >>
         }
         return window.dash_clientside.no_update;
     }
