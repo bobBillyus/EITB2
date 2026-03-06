@@ -1,27 +1,53 @@
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/cascadia-mono/index.min.css');
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: "Cascadia Mono", monospace;
+    overflow-x: hidden;
+}
+
+.wrapper {
+    display: flex;
+    min-height: 100vh;
+    width: 100vw;
+}
+
 /* Sidebar Styling */
 .sidebar {
     width: 250px;
+    min-width: 250px;
     flex-shrink: 0;
     padding: 20px;
     color: white;
     background: rgb(255, 140, 0);
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease-in-out;
-    position: relative;
+    transition: margin-left 0.3s ease-in-out, opacity 0.3s;
     z-index: 100;
 }
 
-/* Sidebar hidden state - Sliding instead of vanishing */
+/* Slide out instead of vanishing */
 .sidebar.hidden {
-    margin-left: -290px; /* Accounts for width + padding */
+    margin-left: -290px; 
     opacity: 0;
 }
 
-/* The Toggle Button */
+.main {
+    flex-grow: 1;
+    min-width: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Toggle Button */
 .sidebar_toggle_btn {
     position: fixed;
     top: 20px;
-    left: 20px;
+    left: 260px; /* Sits just outside the sidebar */
     z-index: 1001;
     background: rgb(255, 140, 0);
     color: white;
@@ -30,33 +56,35 @@
     padding: 8px;
     cursor: pointer;
     display: flex;
-    align-items: center;
-    justify-content: center;
     transition: left 0.3s ease-in-out;
 }
 
-/* Move the button when sidebar is hidden so it doesn't float in mid-air */
-.sidebar.hidden ~ .main .sidebar_toggle_btn {
+/* Move button to the corner when sidebar is hidden */
+.sidebar.hidden + .main .sidebar_toggle_btn {
     left: 20px;
 }
 
-.main {
-    flex-grow: 1;
-    flex-basis: 0;   /* Forces it to calculate width based on remaining space */
-    min-width: 0;    /* Prevents flex children from overflowing */
-    padding: 20px;
+/* Search Box */
+.search_box {
+    width: 90%;
+    max-width: 600px;
+    background: #fff;
+    margin: 40px auto;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.row {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    transition: all 0.3s ease-in-out;
+    padding: 10px 20px;
 }
 
-/* When expanded, remove the phantom margin */
-.main.expanded {
-    margin-left: 0;
-}
-
-/* Icon rotation for the arrow */
-#toggle-icon {
-    transition: transform 0.3s ease;
+input[type="text"] {
+    font-family: "Cascadia Mono", monospace !important;
+    flex: 1;
+    height: 50px;
+    border: 0;
+    outline: 0;
+    font-size: 18px;
 }

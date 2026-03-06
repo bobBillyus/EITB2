@@ -28,41 +28,36 @@ app.layout = html.Div(className="wrapper", children=[
     # 1. Sidebar
     html.Div([
         html.H2("About EITB2"),
-        html.P("This tool finds the shortest path between any Wikipedia page and Tuberculosis."),
+        html.P("Shortest path to Tuberculosis."),
         html.Hr(),
-        html.P("Status:"),
-        html.Div(id='status-indicator', children="Waiting for search...")
+        html.Div(id='status-indicator', children="Waiting...")
     ], id='sidebar', className='sidebar'),
 
-    # 2. Main Content
+    # 2. Main Area
     html.Div(className="main", id="main-content", children=[
-        # TOGGLE BUTTON with Arrow Icon
         html.Button(
-            html.I(className="material-icons", id="toggle-icon", children="first_page"),
+            html.I(className="material-icons", id="toggle-icon", children="double_arrow"),
             id='sidebar-toggle',
             className='sidebar_toggle_btn',
             n_clicks=0
         ),
-
+        
         html.H1("EITB2: Wikipedia Path Finder"),
         
-        # Search Box
         html.Div(className="search_box", children=[
             html.Div(className="row", children=[
                 dcc.Input(id='search-input', type='text', placeholder='Search Wikipedia...', autoComplete="off"),
-                html.Button(html.I(className="fa-solid fa-magnifying-glass"), id='search-btn', n_clicks=0)
+                html.Button(html.I(className="fa-solid fa-magnifying-glass"), id='search-btn')
             ]),
             html.Div(id='suggestions-container', className="suggestions_container")
         ]),
 
-        # Graph
         cyto.Cytoscape(
             id='cytoscape-graph',
             layout={'name': 'breadthfirst'},
             style={'width': '100%', 'height': '600px'},
             elements=[]
         ),
-        
         dcc.Interval(id='interval-component', interval=1000)
     ])
 ])
@@ -87,27 +82,23 @@ def find_paths(start_title):
 
 # --- CALLBACKS ---
 
-# Toggle Sidebar (Clientside for speed)
 clientside_callback(
     """
     function(n_clicks) {
         const sidebar = document.getElementById('sidebar');
-        const main = document.getElementById('main-content');
         const icon = document.getElementById('toggle-icon');
         
         if (n_clicks % 2 !== 0) {
             sidebar.classList.add('hidden');
-            main.classList.add('expanded');
-            icon.textContent = 'last_page'; // Arrow pointing right
+            icon.style.transform = 'rotate(0deg)'; // Points >>
         } else {
             sidebar.classList.remove('hidden');
-            main.classList.remove('expanded');
-            icon.textContent = 'first_page'; // Arrow pointing left
+            icon.style.transform = 'rotate(180deg)'; // Points <<
         }
         return window.dash_clientside.no_update;
     }
     """,
-    Output('sidebar-toggle', 'id'), # Dummy output
+    Output('sidebar-toggle', 'id'),
     Input('sidebar-toggle', 'n_clicks'),
 )
 
