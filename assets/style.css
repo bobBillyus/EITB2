@@ -60,6 +60,10 @@ body, html {
     transition: left 0.3s ease-in-out;
 }
 
+.sidebar_toggle_btn:hover{
+    background: rgb(255, 100, 0);
+}
+
 /* Move button to the corner when sidebar is hidden */
 .sidebar.hidden + .main .sidebar_toggle_btn {
     left: 20px;
@@ -98,5 +102,5 @@ input[type="text"] {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* transition: transform 0.2s ease; */
+    transition: transform 0.2s ease;
 }
