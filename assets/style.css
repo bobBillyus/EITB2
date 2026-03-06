@@ -139,5 +139,6 @@ input[type="text"] {
 }
 
 .suggestions_container ul li button:hover {
-    background: purple;
+    background: #fff5e6; 
+    color: rgb(255, 140, 0);
 }
