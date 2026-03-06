@@ -2,6 +2,7 @@ import threading
 import wikipediaapi
 import wikipedia
 import dash
+import json
 from dash import Dash, html, dcc, Input, Output, State, ALL, callback_context, clientside_callback
 import dash_cytoscape as cyto
 
@@ -46,7 +47,7 @@ app.layout = html.Div(className="wrapper", children=[
         
         html.Div(className="search_box", children=[
             html.Div(className="row", children=[
-                dcc.Input(id='search-input', type='text', placeholder='Search Wikipedia...', autoComplete="on"),
+                dcc.Input(id='search-input', type='text', placeholder='Search Wikipedia...', autoComplete="off"),
                 html.Button(html.I(className="fa-solid fa-magnifying-glass"), id='search-btn')
             ]),
             html.Div(id='suggestions-container', className="suggestions_container")
@@ -70,6 +71,7 @@ def find_paths(start_title):
     if not page.exists(): return
     with data_lock:
         state["elements"].append({'data': {'id': start_title, 'label': start_title}})
+    
     links = page.links
     for title in sorted(links.keys()):
         if len(state["elements"]) > 150: break 
@@ -82,27 +84,47 @@ def find_paths(start_title):
 
 # --- CALLBACKS ---
 
+# Sidebar Toggle
 clientside_callback(
     """
     function(n_clicks) {
         const sidebar = document.getElementById('sidebar');
         const icon = document.getElementById('toggle-icon');
+        if (!sidebar || !icon) return window.dash_clientside.no_update;
         
         if (n_clicks % 2 !== 0) {
             sidebar.classList.add('hidden');
-            icon.style.transform = 'rotate(0deg)'; // Points >>
+            icon.style.transform = 'rotate(0deg)';
         } else {
             sidebar.classList.remove('hidden');
-            icon.style.transform = 'rotate(180deg)'; // Points <<
+            icon.style.transform = 'rotate(180deg)';
         }
         return window.dash_clientside.no_update;
     }
     """,
-    Output('sidebar-toggle', 'id'),
+    Output('sidebar-toggle', 'n_clicks'),
     Input('sidebar-toggle', 'n_clicks'),
 )
 
-# 1. Update your existing suggestions callback to clear on click
+# Click Outside to Close Suggestions
+clientside_callback(
+    """
+    function(n_clicks) {
+        document.onclick = function(e){
+            const container = document.getElementById('suggestions-container');
+            const input = document.getElementById('search-input');
+            if (container && e.target !== input && !container.contains(e.target)) {
+                container.innerHTML = '';
+            }
+        };
+        return window.dash_clientside.no_update;
+    }
+    """,
+    Output('suggestions-container', 'id'),
+    Input('suggestions-container', 'id'),
+)
+
+# Update Suggestions while typing
 @app.callback(
     Output('suggestions-container', 'children', allow_duplicate=True),
     Input('search-input', 'value'),
@@ -113,44 +135,32 @@ def update_suggestions(val):
         return []
     try:
         options = wikipedia.search(val, results=5)
+        return html.Ul([
+            html.Li(html.Button(opt, id={'type': 'suggest-item', 'index': opt})) 
+            for opt in options
+        ])
     except:
         return []
-    
-    return html.Ul([
-        html.Li(html.Button(opt, id={'type': 'suggest-item', 'index': opt}, className="suggestion-btn")) 
-        for opt in options
-    ])
 
-# 2. NEW CALLBACK: Handle clicking a suggestion
+# Handle clicking a suggestion
 @app.callback(
     Output('search-input', 'value'),
     Output('suggestions-container', 'children'),
     Input({'type': 'suggest-item', 'index': ALL}, 'n_clicks'),
-    State({'type': 'suggest-item', 'index': ALL}, 'id'),
     prevent_initial_call=True
 )
-def select_suggestion(n_clicks, ids):
+def select_suggestion(n_clicks):
     ctx = dash.callback_context
-    if not ctx.triggered:
+    if not ctx.triggered or not any(n_clicks):
         return dash.no_update, dash.no_update
     
-    # Find which suggestion was clicked
-    clicked_id = ctx.triggered[0]['prop_id'].split('.')[0]
-    # Parse the dictionary string back to a dict to get the 'index' (the word)
-    import json
-    clicked_index = json.loads(clicked_id.replace("'", '"'))['index']
+    # Get the index (the title) from the triggered ID
+    clicked_id_str = ctx.triggered[0]['prop_id'].split('.')[0]
+    clicked_id = json.loads(clicked_id_str)
     
-    # Return the word to the input and EMPTY the suggestions
-    return clicked_index, []
+    return clicked_id['index'], []
 
-def update_suggestions(val):
-    if not val or len(val) < 3: return []
-    options = wikipedia.search(val, results=5)
-    return html.Ul([
-        html.Li(html.Button(opt, id={'type': 'suggest-item', 'index': opt})) 
-        for opt in options
-    ])
-
+# Search execution
 @app.callback(
     Output('search-btn', 'disabled'),
     Input('search-btn', 'n_clicks'),
