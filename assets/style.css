@@ -71,6 +71,7 @@ body, html {
 .search_box {
     width: 90%;
     max-width: 600px;
+    position: relative;
     background: #fff;
     margin: 40px auto;
     border-radius: 15px;
