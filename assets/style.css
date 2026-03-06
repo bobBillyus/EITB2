@@ -112,6 +112,7 @@ input[type="text"] {
 
 /* The default state of a suggestion */
 .suggestions_container ul li button {
+    list-style: none;
     width: 100%;
     text-align: left;
     background: none;
