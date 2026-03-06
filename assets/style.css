@@ -101,6 +101,6 @@ input[type="text"] {
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: right;
     transition: transform 0.2s ease;
 }
